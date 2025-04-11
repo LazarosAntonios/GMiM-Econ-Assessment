@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -90,11 +91,17 @@ const QuizSelector: React.FC<QuizSelectorProps> = ({ quizzes, onSelectQuiz }) =>
           {/* Pre-Test section - always visible */}
           <div className="mb-6">
             <h2 className="text-xl font-bold mb-4 text-econ-navy">Pre-Test Assessments</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {preTestQuizzes.map((quiz) => (
-                <QuizCard key={quiz.id} quiz={quiz} onSelectQuiz={onSelectQuiz} />
-              ))}
-            </div>
+            {preTestQuizzes.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {preTestQuizzes.map((quiz) => (
+                  <QuizCard key={quiz.id} quiz={quiz} onSelectQuiz={onSelectQuiz} />
+                ))}
+              </div>
+            ) : (
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center">
+                <p className="text-gray-600">No pre-test assessments are currently available.</p>
+              </div>
+            )}
           </div>
           
           {/* Post-Test section with lock/unlock */}
