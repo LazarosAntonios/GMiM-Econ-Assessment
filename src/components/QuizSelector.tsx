@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Quiz, QuizResult } from '@/types/quiz';
+import { Quiz, QuizResult, StudentInfo } from '@/types/quiz'; // Add StudentInfo import
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import PreTestStatusCard from './quiz-selector/PreTestStatusCard';
@@ -16,6 +16,7 @@ interface QuizSelectorProps {
   hasCompletedPreTest: boolean;
   isEligibleForAdvanced: boolean;
   studentResults: QuizResult[];
+  studentInfo: StudentInfo; // We need to receive studentInfo
 }
 
 const QuizSelector: React.FC<QuizSelectorProps> = ({ 
@@ -25,7 +26,8 @@ const QuizSelector: React.FC<QuizSelectorProps> = ({
   onSelectQuiz, 
   hasCompletedPreTest,
   isEligibleForAdvanced,
-  studentResults
+  studentResults,
+  studentInfo // Add studentInfo to the props destructuring
 }) => {
   const managerialQuizzes = quizzes.filter(quiz => quiz.category === "managerial");
   const [showManagerial, setShowManagerial] = useState<boolean>(isEligibleForAdvanced);
@@ -55,7 +57,7 @@ const QuizSelector: React.FC<QuizSelectorProps> = ({
       </p>
       
       {/* Display Pre-Test Status if completed */}
-      <PreTestStatusCard preTestStatus={preTestStatus} />
+      <PreTestStatusCard preTestStatus={preTestStatus} studentInfo={studentInfo} />
       
       {/* Display Advanced Course Option with clear visual separation */}
       {(isEligibleForAdvanced || !hasCompletedPreTest) && (

@@ -59,6 +59,7 @@ const Student: React.FC = () => {
               hasCompletedPreTest={hasCompletedPreTest}
               isEligibleForAdvanced={isEligibleForAdvanced}
               studentResults={quizResults}
+              studentInfo={studentInfo} // Pass studentInfo to QuizSelector
             />
           ) : (
             <QuizContainer
