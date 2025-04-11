@@ -2,9 +2,10 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { StudentInfo } from '@/types/quiz';
 import { Separator } from '@/components/ui/separator';
+import { useNavigate } from 'react-router-dom';
 
 interface IntroMessageProps {
   studentInfo?: StudentInfo; // Make studentInfo optional
@@ -12,14 +13,29 @@ interface IntroMessageProps {
 }
 
 const IntroMessage: React.FC<IntroMessageProps> = ({ studentInfo, onContinue }) => {
+  const navigate = useNavigate();
+
   return (
     <Card className="max-w-4xl w-full mx-auto shadow-lg animate-fade-in">
       <CardHeader className="bg-econ-navy text-white rounded-t-lg">
-        <CardTitle className="text-2xl">Welcome to LSE MiM Economics Assessment</CardTitle>
-        <CardDescription className="text-gray-300">
-          {studentInfo ? `Hello ${studentInfo.name} (ID: ${studentInfo.studentId})` : "Please register to continue"}
-        </CardDescription>
+        <div className="flex justify-between items-center">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-white hover:bg-econ-navy/50"
+            onClick={() => navigate('/')}
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Home
+          </Button>
+          <div>
+            <CardTitle className="text-2xl">Welcome to LSE MiM Economics Assessment</CardTitle>
+            <CardDescription className="text-gray-300">
+              {studentInfo ? `Hello ${studentInfo.name} (ID: ${studentInfo.studentId})` : "Please register to continue"}
+            </CardDescription>
+          </div>
+        </div>
       </CardHeader>
+      
       <CardContent className="pt-6">
         <div className="prose max-w-none">
           <p className="text-lg font-medium mb-4">Hey you!,</p>
@@ -67,11 +83,18 @@ const IntroMessage: React.FC<IntroMessageProps> = ({ studentInfo, onContinue }) 
         </div>
       </CardContent>
       {onContinue && (
-        <CardFooter>
+        <CardFooter className="flex justify-between">
+          <Button 
+            variant="outline" 
+            onClick={() => navigate('/')}
+            className="hover:bg-econ-navy/10"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" /> Back to Home
+          </Button>
           <Button 
             onClick={onContinue}
             variant="default" 
-            className="w-full bg-econ-accent hover:bg-econ-navy"
+            className="bg-econ-accent hover:bg-econ-navy"
           >
             Continue to Registration <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
