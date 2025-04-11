@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { Quiz } from "../types/quiz";
+import { Quiz, StudentInfo } from "../types/quiz";
 import QuizHeader from "./QuizHeader";
 import QuestionCard from "./QuestionCard";
 import { Button } from "@/components/ui/button";
@@ -11,9 +11,10 @@ import QuizWelcome from "./QuizWelcome";
 interface QuizContainerProps {
   quiz: Quiz;
   onBack: () => void;
+  studentInfo: StudentInfo;
 }
 
-const QuizContainer: React.FC<QuizContainerProps> = ({ quiz, onBack }) => {
+const QuizContainer: React.FC<QuizContainerProps> = ({ quiz, onBack, studentInfo }) => {
   const [quizStarted, setQuizStarted] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState<(number | null)[]>(
@@ -72,6 +73,8 @@ const QuizContainer: React.FC<QuizContainerProps> = ({ quiz, onBack }) => {
         totalQuestions={quiz.questions.length}
         onBack={onBack}
         quizTitle={quiz.title}
+        quizCategory={quiz.category}
+        studentInfo={studentInfo}
       />
     );
   }

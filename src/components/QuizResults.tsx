@@ -2,20 +2,25 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, Trophy } from "lucide-react";
+import { ArrowRight, Trophy, UserRound, IdCard } from "lucide-react";
+import { StudentInfo } from '@/types/quiz';
 
 interface QuizResultsProps {
   score: number;
   totalQuestions: number;
-  onBack: () => void; // Changed from onRestart to onBack
+  onBack: () => void;
   quizTitle: string;
+  quizCategory: "managerial" | "foundational";
+  studentInfo: StudentInfo;
 }
 
 const QuizResults: React.FC<QuizResultsProps> = ({
   score,
   totalQuestions,
   onBack,
-  quizTitle
+  quizTitle,
+  quizCategory,
+  studentInfo
 }) => {
   const percentage = Math.round((score / totalQuestions) * 100);
   
@@ -25,6 +30,14 @@ const QuizResults: React.FC<QuizResultsProps> = ({
   } else if (percentage < 80) {
     message = "Good job! Room for improvement.";
   }
+
+  // Determine eligibility for advanced course (only for managerial quizzes)
+  const isEligibleForAdvanced = quizCategory === "managerial" && percentage >= 70;
+  const eligibilityMessage = quizCategory === "managerial" 
+    ? (isEligibleForAdvanced 
+      ? "You are eligible for the advanced Economics course!" 
+      : "We recommend the standard Economics course for you.")
+    : null;
 
   return (
     <Card className="max-w-md w-full mx-auto shadow-lg animate-bounce-in border-t-4 border-econ-gold">
@@ -36,6 +49,13 @@ const QuizResults: React.FC<QuizResultsProps> = ({
         </CardDescription>
       </CardHeader>
       <CardContent className="pt-8">
+        <div className="flex items-center justify-center space-x-2 mb-4 text-gray-700">
+          <UserRound className="h-5 w-5" />
+          <span>{studentInfo.name}</span>
+          <IdCard className="h-5 w-5 ml-2" />
+          <span>{studentInfo.studentId}</span>
+        </div>
+        
         <div className="text-center">
           <div className="mb-4">
             <span className="text-5xl font-bold text-econ-navy">{score}</span>
@@ -51,6 +71,12 @@ const QuizResults: React.FC<QuizResultsProps> = ({
             <p className="text-sm text-gray-600">{percentage}% Correct</p>
           </div>
           <p className="text-lg font-medium mb-4">{message}</p>
+          
+          {quizCategory === "managerial" && (
+            <div className={`p-4 rounded-lg ${isEligibleForAdvanced ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-yellow-50 text-yellow-800 border border-yellow-200'}`}>
+              <p className="font-medium">{eligibilityMessage}</p>
+            </div>
+          )}
         </div>
       </CardContent>
       <CardFooter>

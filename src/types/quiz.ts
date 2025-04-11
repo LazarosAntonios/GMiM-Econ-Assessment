@@ -15,3 +15,19 @@ export interface Quiz {
   duration: number; // Duration in minutes
   questions: Question[];
 }
+
+export interface StudentInfo {
+  name: string;
+  studentId: string;
+}
+
+export interface QuizResult {
+  studentInfo: StudentInfo;
+  quizId: number;
+  quizTitle: string;
+  quizCategory: "managerial" | "foundational";
+  score: number;
+  totalQuestions: number;
+  isEligibleForAdvanced?: boolean; // Only relevant for managerial quizzes
+  date: Date;
+}
