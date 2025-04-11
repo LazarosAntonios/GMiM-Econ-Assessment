@@ -2,7 +2,8 @@
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { AlertTriangle, CheckCircle } from "lucide-react";
+import { AlertTriangle, CheckCircle, UserRound, IdCard } from "lucide-react";
+import { StudentInfo } from '@/types/quiz';
 
 interface PreTestStatusCardProps {
   preTestStatus: {
@@ -12,9 +13,10 @@ interface PreTestStatusCardProps {
     isEligible: boolean;
     date: Date;
   } | null;
+  studentInfo: StudentInfo;
 }
 
-const PreTestStatusCard: React.FC<PreTestStatusCardProps> = ({ preTestStatus }) => {
+const PreTestStatusCard: React.FC<PreTestStatusCardProps> = ({ preTestStatus, studentInfo }) => {
   if (!preTestStatus) return null;
   
   return (
@@ -30,6 +32,14 @@ const PreTestStatusCard: React.FC<PreTestStatusCardProps> = ({ preTestStatus }) 
           </div>
         </CardHeader>
         <CardContent>
+          {/* Student Information */}
+          <div className="flex items-center justify-center space-x-2 mb-4 text-gray-700 border-b pb-3">
+            <UserRound className="h-5 w-5" />
+            <span className="font-medium">{studentInfo.name}</span>
+            <IdCard className="h-5 w-5 ml-2" />
+            <span>{studentInfo.studentId}</span>
+          </div>
+          
           <div className="flex justify-between items-center">
             <div>
               <p className="text-gray-600">

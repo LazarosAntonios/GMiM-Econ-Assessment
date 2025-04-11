@@ -9,7 +9,8 @@ import { useForm } from "react-hook-form";
 import { StudentInfo } from '@/types/quiz';
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { BookOpen } from 'lucide-react';
+import { BookOpen, Camera } from 'lucide-react';
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -50,6 +51,13 @@ const StudentRegistration: React.FC<StudentRegistrationProps> = ({ onSubmit }) =
         </CardDescription>
       </CardHeader>
       <CardContent className="pt-6">
+        <Alert className="mb-6 bg-blue-50 border-blue-200">
+          <Camera className="h-4 w-4 text-blue-600" />
+          <AlertDescription className="text-blue-700">
+            Important: You'll need to screenshot your test results and email them to your instructor. Please enter your correct details below.
+          </AlertDescription>
+        </Alert>
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
             <FormField

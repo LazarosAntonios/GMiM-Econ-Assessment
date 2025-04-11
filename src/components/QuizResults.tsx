@@ -63,11 +63,18 @@ const QuizResults: React.FC<QuizResultsProps> = ({
         </CardDescription>
       </CardHeader>
       <CardContent className="pt-8">
-        <div className="flex items-center justify-center space-x-2 mb-4 text-gray-700">
-          <UserRound className="h-5 w-5" />
-          <span>{studentInfo.name}</span>
-          <IdCard className="h-5 w-5 ml-2" />
-          <span>{studentInfo.studentId}</span>
+        {/* Student Information - Enhanced and more visible */}
+        <div className="flex items-center justify-center space-x-2 mb-6 p-3 bg-blue-50 rounded-lg border border-blue-100">
+          <div className="flex flex-col items-center">
+            <div className="flex items-center mb-1">
+              <UserRound className="h-5 w-5 text-blue-700 mr-2" />
+              <span className="font-semibold text-blue-900">{studentInfo.name}</span>
+            </div>
+            <div className="flex items-center">
+              <IdCard className="h-5 w-5 text-blue-700 mr-2" />
+              <span className="font-semibold text-blue-900">ID: {studentInfo.studentId}</span>
+            </div>
+          </div>
         </div>
         
         <div className="text-center">
