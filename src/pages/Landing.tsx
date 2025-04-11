@@ -19,7 +19,7 @@ const Landing: React.FC = () => {
             onError={(e) => {
               e.currentTarget.src = "https://www.lse.ac.uk/style-assets/images/lse.svg";
             }}
-            className="h-24 object-contain"
+            className="h-40 object-contain" // Increased from h-24 to h-40
           />
         </div>
         
