@@ -25,7 +25,7 @@ const Landing: React.FC = () => {
         
         <Card className="shadow-lg">
           <CardHeader className="bg-econ-navy text-white rounded-t-lg">
-            <CardTitle className="text-2xl text-center">LSE MiM Economics Assessment</CardTitle>
+            <CardTitle className="text-2xl text-center">LSE MiM Assessment</CardTitle>
           </CardHeader>
           
           <CardContent className="pt-6 pb-4">

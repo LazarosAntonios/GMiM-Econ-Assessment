@@ -17,6 +17,8 @@ const Staff: React.FC = () => {
   const handleAdminAuth = (authenticated: boolean) => {
     if (authenticated) {
       setIsAdmin(authenticated);
+      // Automatically close the dialog when successfully authenticated
+      setIsAuthDialogOpen(false);
     } else {
       navigate('/');
       toast({
@@ -43,17 +45,19 @@ const Staff: React.FC = () => {
 
   return (
     <>
-      <AdminAuth 
-        onAuthenticate={handleAdminAuth}
-        isOpen={isAuthDialogOpen}
-        onOpenChange={(open) => {
-          setIsAuthDialogOpen(open);
-          if (!open && !isAdmin) {
-            // If dialog is closed and user is not authenticated, go back to landing page
-            navigate('/');
-          }
-        }}
-      />
+      {!isAdmin && (
+        <AdminAuth 
+          onAuthenticate={handleAdminAuth}
+          isOpen={isAuthDialogOpen}
+          onOpenChange={(open) => {
+            setIsAuthDialogOpen(open);
+            if (!open && !isAdmin) {
+              // If dialog is closed and user is not authenticated, go back to landing page
+              navigate('/');
+            }
+          }}
+        />
+      )}
 
       {isAdmin && <AdminDashboard results={quizResults} onDisableAdmin={handleDisableAdmin} />}
     </>
