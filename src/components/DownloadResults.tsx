@@ -9,10 +9,14 @@ import { useToast } from "@/hooks/use-toast";
 interface DownloadResultsProps {
   results: QuizResult[];
   studentId?: string;
+  isAdmin: boolean; // Add isAdmin prop
 }
 
-const DownloadResults: React.FC<DownloadResultsProps> = ({ results, studentId }) => {
+const DownloadResults: React.FC<DownloadResultsProps> = ({ results, studentId, isAdmin }) => {
   const { toast } = useToast();
+  
+  // Don't render anything if not an admin
+  if (!isAdmin) return null;
   
   const handleDownload = () => {
     if (results.length === 0) {
@@ -54,7 +58,7 @@ const DownloadResults: React.FC<DownloadResultsProps> = ({ results, studentId })
       disabled={results.length === 0}
     >
       <Download className="h-4 w-4" />
-      Export Results as CSV
+      Export Results as CSV (Admin Only)
     </Button>
   );
 };
