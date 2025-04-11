@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,6 +6,7 @@ import { Quiz, QuizResult } from '@/types/quiz';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import { toast } from "@/components/ui/use-toast";
 
 interface QuizSelectorProps {
@@ -112,42 +112,57 @@ const QuizSelector: React.FC<QuizSelectorProps> = ({
         </div>
       )}
       
-      {/* Display Advanced Course Option if eligible */}
-      {(isEligibleForAdvanced || !hasCompletedPreTest) && (
-        <div className="mb-8 flex flex-col items-center">
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-5 max-w-md">
-            <div className="flex items-start">
-              <Badge variant="outline" className="bg-blue-100 text-blue-800 mr-2 mt-1">
-                {isEligibleForAdvanced ? "Available" : "Optional"}
-              </Badge>
-              <div>
-                <h3 className="font-semibold text-econ-navy">Managerial Economics Assessment</h3>
-                <p className="text-sm text-gray-600 mb-3">
-                  For students with prior economics knowledge who may qualify for advanced placement.
-                </p>
-                {!showManagerial ? (
-                  <Button 
-                    onClick={() => setShowManagerial(true)} 
-                    variant="outline"
-                    className="text-sm border-econ-navy text-econ-navy hover:bg-econ-navy hover:text-white"
-                  >
-                    <BookIcon className="mr-2 h-4 w-4" />
-                    Enroll in Advanced Assessment
-                  </Button>
-                ) : (
-                  <Button 
-                    onClick={() => setShowManagerial(false)} 
-                    variant="outline"
-                    className="text-sm border-gray-400 text-gray-500"
-                  >
-                    Hide Advanced Assessment
-                  </Button>
-                )}
+      {/* Display Advanced Course Option with clear visual separation */}
+      <div className="mb-10 mt-4">
+        <div className="flex items-center mb-6">
+          <h2 className="text-xl font-bold text-econ-navy mr-3">OPTIONAL ASSESSMENTS</h2>
+          <Separator className="flex-grow bg-econ-navy/20" />
+        </div>
+        
+        {(isEligibleForAdvanced || !hasCompletedPreTest) && (
+          <div className="flex flex-col items-center">
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-5 max-w-md w-full">
+              <div className="flex items-start">
+                <Badge variant="outline" className="bg-blue-100 text-blue-800 mr-2 mt-1">
+                  {isEligibleForAdvanced ? "Available" : "Optional"}
+                </Badge>
+                <div>
+                  <h3 className="font-semibold text-econ-navy">Managerial Economics Assessment</h3>
+                  <p className="text-sm text-gray-600 mb-3">
+                    For students with prior economics knowledge who may qualify for advanced placement.
+                  </p>
+                  {!showManagerial ? (
+                    <Button 
+                      onClick={() => setShowManagerial(true)} 
+                      variant="outline"
+                      className="text-sm border-econ-navy text-econ-navy hover:bg-econ-navy hover:text-white"
+                    >
+                      <BookIcon className="mr-2 h-4 w-4" />
+                      Enroll in Advanced Assessment
+                    </Button>
+                  ) : (
+                    <Button 
+                      onClick={() => setShowManagerial(false)} 
+                      variant="outline"
+                      className="text-sm border-gray-400 text-gray-500"
+                    >
+                      Hide Advanced Assessment
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
+        )}
+      </div>
+
+      {/* Clear separation for mandatory tests section */}
+      <div className="mb-8">
+        <div className="flex items-center mb-6">
+          <h2 className="text-xl font-bold text-econ-navy mr-3">MANDATORY ASSESSMENTS</h2>
+          <Separator className="flex-grow bg-econ-navy/20" />
         </div>
-      )}
+      </div>
       
       <Tabs defaultValue="foundational" className="max-w-4xl mx-auto">
         <TabsList className="grid w-full grid-cols-2 mb-8">
@@ -158,7 +173,11 @@ const QuizSelector: React.FC<QuizSelectorProps> = ({
         <TabsContent value="foundational">
           {/* Pre-Test section - always visible */}
           <div className="mb-6">
-            <h2 className="text-xl font-bold mb-4 text-econ-navy">Pre-Test Assessment</h2>
+            <div className="bg-green-50 border-l-4 border-green-500 p-3 mb-4">
+              <h3 className="font-bold text-green-700">REQUIRED: Pre-Test Assessment</h3>
+              <p className="text-sm text-green-600">All students must complete the pre-test to determine course eligibility</p>
+            </div>
+            
             {/* Show the comprehensive pre-test */}
             <div className="mb-8">
               {!hasCompletedPreTest ? (
@@ -218,6 +237,11 @@ const QuizSelector: React.FC<QuizSelectorProps> = ({
           
           {/* Post-Test section with lock/unlock */}
           <div className="mt-10">
+            <div className="bg-green-50 border-l-4 border-green-500 p-3 mb-4">
+              <h3 className="font-bold text-green-700">REQUIRED: Post-Test Assessment</h3>
+              <p className="text-sm text-green-600">Complete the post-test when instructed by your course coordinator</p>
+            </div>
+            
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold text-econ-navy">Post-Test Assessments</h2>
               {!postTestUnlocked && (
@@ -265,6 +289,11 @@ const QuizSelector: React.FC<QuizSelectorProps> = ({
         
         {showManagerial && (
           <TabsContent value="managerial">
+            <div className="bg-blue-50 border-l-4 border-blue-500 p-3 mb-4">
+              <h3 className="font-bold text-blue-700">OPTIONAL: Advanced Course Assessments</h3>
+              <p className="text-sm text-blue-600">These assessments are optional and recommended for students eligible for the advanced track</p>
+            </div>
+            
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {managerialQuizzes.map((quiz) => (
                 <QuizCard key={quiz.id} quiz={quiz} onSelectQuiz={onSelectQuiz} />
