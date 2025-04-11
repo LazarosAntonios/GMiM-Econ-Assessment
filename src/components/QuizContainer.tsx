@@ -256,6 +256,7 @@ const QuizContainer: React.FC<QuizContainerProps> = ({ quiz, onBack, studentInfo
         currentQuestion={currentQuestionIndex + 1}
         totalQuestions={quiz.questions.length}
         currentSection={currentQuestion.section}
+        isPostTest={quiz.isPostTest}
       />
       
       {showSectionHeader && currentQuestion.section && (

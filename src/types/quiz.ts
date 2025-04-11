@@ -52,4 +52,3 @@ export interface StudentResults {
   student: StudentInfo;
   results: QuizResult[];
 }
-

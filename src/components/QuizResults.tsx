@@ -32,6 +32,7 @@ const QuizResults: React.FC<QuizResultsProps> = ({
   failedSections
 }) => {
   const percentage = Math.round((score / totalQuestions) * 100);
+  const isPostTest = quizTitle.includes("Post-Test");
   
   let message = "Excellent work!";
   if (percentage < 60) {
@@ -46,13 +47,15 @@ const QuizResults: React.FC<QuizResultsProps> = ({
     : "We recommend the standard Economics course for you.";
 
   // Next steps guidance message
-  const nextStepsMessage = isEligibleForAdvanced 
-    ? "You can now proceed to the optional advanced assessments or wait for the post-test (password available in Moodle)."
-    : "Please refresh your skills on Moodle and return to complete the post-test when ready (password available in Moodle).";
+  const nextStepsMessage = isPostTest
+    ? "Thank you for completing the Post-Test! Please screenshot and email these results to your instructor."
+    : isEligibleForAdvanced 
+      ? "You can now proceed to the optional advanced assessments or wait for the post-test (password available in Moodle)."
+      : "Please refresh your skills on Moodle and return to complete the post-test when ready (password available in Moodle).";
 
   return (
-    <Card className="max-w-md w-full mx-auto shadow-lg animate-bounce-in border-t-4 border-econ-gold">
-      <CardHeader className="bg-econ-navy text-white rounded-t-lg text-center pb-8 pt-10">
+    <Card className={`max-w-md w-full mx-auto shadow-lg animate-bounce-in border-t-4 ${isPostTest ? "border-purple-500" : "border-econ-gold"}`}>
+      <CardHeader className={`${isPostTest ? "bg-purple-900" : "bg-econ-navy"} text-white rounded-t-lg text-center pb-8 pt-10`}>
         <Trophy className="w-16 h-16 mx-auto mb-4 text-econ-gold" />
         <CardTitle className="text-2xl">Quiz Results</CardTitle>
         <CardDescription className="text-gray-300">
@@ -113,9 +116,11 @@ const QuizResults: React.FC<QuizResultsProps> = ({
             </div>
           )}
           
-          <div className={`p-4 rounded-lg ${isEligibleForAdvanced ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-yellow-50 text-yellow-800 border border-yellow-200'}`}>
-            <p className="font-medium">{eligibilityMessage}</p>
-          </div>
+          {!isPostTest && (
+            <div className={`p-4 rounded-lg ${isEligibleForAdvanced ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-yellow-50 text-yellow-800 border border-yellow-200'}`}>
+              <p className="font-medium">{eligibilityMessage}</p>
+            </div>
+          )}
           
           <div className="mt-6">
             <Separator className="my-4" />
@@ -136,7 +141,7 @@ const QuizResults: React.FC<QuizResultsProps> = ({
         <Button 
           onClick={onBack} 
           variant="default" 
-          className="w-full bg-econ-accent hover:bg-econ-navy"
+          className={`w-full ${isPostTest ? "bg-purple-600 hover:bg-purple-700" : "bg-econ-accent hover:bg-econ-navy"}`}
         >
           <ArrowRight className="w-4 h-4 mr-2" /> Back to Quizzes
         </Button>

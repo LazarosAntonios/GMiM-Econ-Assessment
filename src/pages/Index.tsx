@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { sampleQuizzes } from "@/data/sampleQuizzes";
 import { foundationalPreTest } from "@/data/preTestQuiz";
+import { foundationalPostTest } from "@/data/postTestQuiz";
 import QuizSelector from "@/components/QuizSelector";
 import QuizContainer from "@/components/QuizContainer";
 import { Quiz, StudentInfo, QuizResult } from "@/types/quiz";
@@ -59,14 +60,7 @@ const Index = () => {
     
     // Handle post-test with ID 201
     if (quizId === 201) {
-      // You can define a post-test quiz here or use a placeholder for now
-      const postTest = {
-        ...foundationalPreTest,
-        id: 201,
-        title: "Foundational Economics Post-Test",
-        description: "Final assessment to evaluate your understanding of foundational economic concepts after completing the course."
-      };
-      setSelectedQuiz(postTest);
+      setSelectedQuiz(foundationalPostTest);
       return;
     }
     
@@ -130,6 +124,7 @@ const Index = () => {
         <QuizSelector 
           quizzes={sampleQuizzes}
           preTest={foundationalPreTest}
+          postTest={foundationalPostTest}
           onSelectQuiz={handleSelectQuiz} 
           hasCompletedPreTest={hasCompletedPreTest}
           isEligibleForAdvanced={isEligibleForAdvanced}
