@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, BookOpen } from "lucide-react";
+import { ArrowRight, BookOpen, Clock } from "lucide-react";
 import { Quiz } from '@/types/quiz';
 
 interface QuizWelcomeProps {
@@ -19,7 +19,7 @@ const QuizWelcome: React.FC<QuizWelcomeProps> = ({ quiz, onStart }) => {
         </div>
         <CardTitle className="text-2xl text-center">{quiz.title}</CardTitle>
         <CardDescription className="text-gray-300 text-center">
-          Test your economics knowledge
+          {quiz.category === "managerial" ? "Managerial Economics Test" : "Foundational Skills Test"}
         </CardDescription>
       </CardHeader>
       <CardContent className="pt-6">
@@ -36,8 +36,8 @@ const QuizWelcome: React.FC<QuizWelcomeProps> = ({ quiz, onStart }) => {
               <span>Multiple choice format</span>
             </li>
             <li className="flex items-center">
-              <span className="w-4 h-4 bg-econ-accent rounded-full mr-2"></span>
-              <span>Explanations provided</span>
+              <Clock className="h-4 w-4 text-econ-accent mr-2" />
+              <span>Duration: {quiz.duration} minutes</span>
             </li>
           </ul>
         </div>

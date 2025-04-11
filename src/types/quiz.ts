@@ -11,5 +11,7 @@ export interface Quiz {
   id: number;
   title: string;
   description: string;
+  category: "managerial" | "foundational";
+  duration: number; // Duration in minutes
   questions: Question[];
 }

@@ -52,14 +52,6 @@ const QuizContainer: React.FC<QuizContainerProps> = ({ quiz, onBack }) => {
     setQuizStarted(true);
   };
 
-  const handleRestartQuiz = () => {
-    setCurrentQuestionIndex(0);
-    setSelectedOptions(Array(quiz.questions.length).fill(null));
-    setAnsweredQuestions(Array(quiz.questions.length).fill(false));
-    setQuizCompleted(false);
-    setQuizStarted(false);
-  };
-
   const calculateScore = () => {
     return selectedOptions.reduce((score, selected, index) => {
       if (selected === quiz.questions[index].correctAnswer) {
@@ -78,7 +70,7 @@ const QuizContainer: React.FC<QuizContainerProps> = ({ quiz, onBack }) => {
       <QuizResults
         score={calculateScore()}
         totalQuestions={quiz.questions.length}
-        onRestart={handleRestartQuiz}
+        onBack={onBack}
         quizTitle={quiz.title}
       />
     );

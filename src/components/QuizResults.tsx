@@ -2,19 +2,19 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, RefreshCw, Trophy } from "lucide-react";
+import { ArrowRight, Trophy } from "lucide-react";
 
 interface QuizResultsProps {
   score: number;
   totalQuestions: number;
-  onRestart: () => void;
+  onBack: () => void; // Changed from onRestart to onBack
   quizTitle: string;
 }
 
 const QuizResults: React.FC<QuizResultsProps> = ({
   score,
   totalQuestions,
-  onRestart,
+  onBack,
   quizTitle
 }) => {
   const percentage = Math.round((score / totalQuestions) * 100);
@@ -55,11 +55,11 @@ const QuizResults: React.FC<QuizResultsProps> = ({
       </CardContent>
       <CardFooter>
         <Button 
-          onClick={onRestart} 
+          onClick={onBack} 
           variant="default" 
           className="w-full bg-econ-accent hover:bg-econ-navy"
         >
-          <RefreshCw className="w-4 h-4 mr-2" /> Try Again
+          <ArrowRight className="w-4 h-4 mr-2" /> Back to Quizzes
         </Button>
       </CardFooter>
     </Card>

@@ -1,116 +1,104 @@
 
-import { Quiz } from "../types/quiz";
+import { Quiz } from '@/types/quiz';
 
-export const economicsQuiz: Quiz = {
-  id: 1,
-  title: "Economics Fundamentals",
-  description: "Test your knowledge of basic economic concepts and principles.",
-  questions: [
-    {
-      id: 1,
-      text: "What is the term for the total value of all goods and services produced within a country's borders in a specific time period?",
-      options: [
-        "Gross National Product (GNP)",
-        "Gross Domestic Product (GDP)",
-        "National Income (NI)",
-        "Consumer Price Index (CPI)"
-      ],
-      correctAnswer: 1,
-      explanation: "Gross Domestic Product (GDP) is the total monetary value of all finished goods and services produced within a country's borders in a specific time period."
-    },
-    {
-      id: 2,
-      text: "The law of demand states that, all else equal, as the price of a good or service increases:",
-      options: [
-        "The quantity demanded increases",
-        "The quantity demanded decreases",
-        "The supply increases",
-        "The market reaches equilibrium"
-      ],
-      correctAnswer: 1,
-      explanation: "According to the law of demand, when the price of a good increases, consumers will demand less of it, assuming all other factors remain constant."
-    },
-    {
-      id: 3,
-      text: "What economic concept refers to the additional satisfaction or benefit that a consumer gains from consuming one more unit of a good or service?",
-      options: [
-        "Marginal utility",
-        "Opportunity cost",
-        "Comparative advantage",
-        "Elasticity of demand"
-      ],
-      correctAnswer: 0,
-      explanation: "Marginal utility is the additional satisfaction a consumer gains from consuming one more unit of a good or service."
-    },
-    {
-      id: 4,
-      text: "In economics, a market structure characterized by a single seller controlling the entire market is called:",
-      options: [
-        "Perfect competition",
-        "Oligopoly",
-        "Monopolistic competition",
-        "Monopoly"
-      ],
-      correctAnswer: 3,
-      explanation: "A monopoly exists when a specific person or enterprise is the only supplier of a particular good or service in a market."
-    },
-    {
-      id: 5,
-      text: "What is the term for a situation where increasing all inputs in the same proportion leads to a more than proportional increase in output?",
-      options: [
-        "Diseconomies of scale",
-        "Economies of scale",
-        "Constant returns to scale",
-        "Diminishing returns"
-      ],
-      correctAnswer: 1,
-      explanation: "Economies of scale refer to the cost advantages that enterprises obtain due to their scale of operation, with cost per unit of output decreasing with increasing scale."
-    }
-  ]
-};
-
-export const macroeconomicsQuiz: Quiz = {
-  id: 2,
-  title: "Macroeconomics Concepts",
-  description: "Test your understanding of macroeconomic theories and policies.",
-  questions: [
-    {
-      id: 1,
-      text: "Which of the following is NOT a tool of monetary policy?",
-      options: [
-        "Open market operations",
-        "Reserve requirements",
-        "Government spending",
-        "Discount rate"
-      ],
-      correctAnswer: 2,
-      explanation: "Government spending is a fiscal policy tool, not a monetary policy tool. Monetary policy is implemented by central banks, while fiscal policy is implemented by the government."
-    },
-    {
-      id: 2,
-      text: "What term describes a sustained increase in the general price level of goods and services in an economy over a period of time?",
-      options: [
-        "Deflation",
-        "Disinflation",
-        "Inflation",
-        "Stagflation"
-      ],
-      correctAnswer: 2,
-      explanation: "Inflation is the rate at which the general level of prices for goods and services is rising, and subsequently, purchasing power is falling."
-    },
-    {
-      id: 3,
-      text: "Which economic theory suggests that government spending can increase aggregate demand and pull an economy out of recession?",
-      options: [
-        "Monetarism",
-        "Keynesian economics",
-        "Supply-side economics",
-        "Classical economics"
-      ],
-      correctAnswer: 1,
-      explanation: "Keynesian economics advocates for increased government expenditures and lower taxes to stimulate demand and pull the global economy out of a depression."
-    }
-  ]
-};
-
-export const sampleQuizzes = [economicsQuiz, macroeconomicsQuiz];
+export const sampleQuizzes: Quiz[] = [
+  {
+    id: 1,
+    title: "Managerial Economics - Part A",
+    description: "Tests fundamental concepts including supply and demand analysis, elasticity, and costs and revenues.",
+    category: "managerial",
+    duration: 45,
+    questions: [
+      {
+        id: 1,
+        text: "If the price of laptops decreases by 10% and quantity demanded increases by 20%, the price elasticity of demand is:",
+        options: ["-0.5", "-1.0", "-2.0", "2.0"],
+        correctAnswer: 2,
+        explanation: "The price elasticity is calculated as percentage change in quantity divided by percentage change in price. Here it's -20%/-10% = -2.0."
+      },
+      {
+        id: 2,
+        text: "In a perfectly competitive market, a firm maximizes profit by producing where:",
+        options: ["Average Revenue = Average Cost", "Average Revenue = Marginal Cost", "Marginal Revenue = Marginal Cost", "Total Revenue = Total Cost"],
+        correctAnswer: 2,
+        explanation: "In any market structure, profit maximization occurs where marginal revenue equals marginal cost."
+      },
+      {
+        id: 3,
+        text: "When a good has an income elasticity of demand greater than 1, it is considered:",
+        options: ["A luxury good", "A necessity", "An inferior good", "A substitute good"],
+        correctAnswer: 0,
+        explanation: "Income elasticity > 1 indicates that demand increases proportionally more than income, which is characteristic of luxury goods."
+      }
+    ]
+  },
+  {
+    id: 2,
+    title: "Managerial Economics - Part B",
+    description: "Advanced topics including game theory, externalities, and advanced pricing strategies.",
+    category: "managerial",
+    duration: 35,
+    questions: [
+      {
+        id: 1,
+        text: "In a payoff matrix where both firms can choose 'High Price' or 'Low Price', the Nash Equilibrium is typically where:",
+        options: ["Both choose High Price", "Both choose Low Price", "One chooses High and one chooses Low", "There is no Nash Equilibrium"],
+        correctAnswer: 1,
+        explanation: "In a classic prisoner's dilemma pricing scenario, both firms have an incentive to undercut, leading to both choosing Low Price as the Nash Equilibrium."
+      },
+      {
+        id: 2,
+        text: "Third-degree price discrimination involves:",
+        options: ["Charging different prices based on quantity purchased", "Charging different prices to different customer groups", "Charging different prices at different times", "Charging a fixed fee plus a per-unit charge"],
+        correctAnswer: 1,
+        explanation: "Third-degree price discrimination is when a firm charges different prices to different customer groups (e.g., students vs. adults)."
+      }
+    ]
+  },
+  {
+    id: 3,
+    title: "Foundational Skills - Mathematics",
+    description: "Tests fundamental mathematical concepts needed for economics including calculus, algebra, and optimization.",
+    category: "foundational",
+    duration: 40,
+    questions: [
+      {
+        id: 1,
+        text: "To find the maximum of the function f(x) = 10x - x², you would:",
+        options: ["Set f(x) = 0 and solve for x", "Set f'(x) = 0 and solve for x", "Set f''(x) = 0 and solve for x", "Find where f(x) is undefined"],
+        correctAnswer: 1,
+        explanation: "To find maxima/minima, we set the first derivative equal to zero. Here f'(x) = 10 - 2x = 0, so x = 5."
+      },
+      {
+        id: 2,
+        text: "If y = 3x² + 2x - 5, then dy/dx equals:",
+        options: ["3x² + 2", "6x + 2", "6x² + 2x", "6x"],
+        correctAnswer: 1,
+        explanation: "The derivative of y = 3x² + 2x - 5 is dy/dx = 6x + 2."
+      }
+    ]
+  },
+  {
+    id: 4,
+    title: "Foundational Skills - Statistics",
+    description: "Tests statistical concepts including probability, distributions, hypothesis testing, and regression analysis.",
+    category: "foundational",
+    duration: 35,
+    questions: [
+      {
+        id: 1,
+        text: "A statistical test with a p-value of 0.03 means:",
+        options: ["The null hypothesis is true", "The probability of the result occurring by chance is 3%", "The alternative hypothesis has a 3% chance of being wrong", "The test is 97% accurate"],
+        correctAnswer: 1,
+        explanation: "A p-value of 0.03 means there's a 3% probability of obtaining the observed results (or more extreme) if the null hypothesis were true."
+      },
+      {
+        id: 2,
+        text: "In a simple linear regression model, the R² value represents:",
+        options: ["The slope of the regression line", "The correlation coefficient", "The proportion of variance in the dependent variable explained by the model", "The statistical significance of the model"],
+        correctAnswer: 2,
+        explanation: "R² (R-squared) measures the proportion of variance in the dependent variable that is explained by the independent variable(s) in the model."
+      }
+    ]
+  }
+];
