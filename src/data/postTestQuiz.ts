@@ -328,9 +328,9 @@ export const foundationalPostTest: Quiz = {
   passingScore: 60, // Updated from 75% to 60%
   sectionsConfig: {
     sections: [
-      { name: "Section A: Math", passingScore: 70 },
-      { name: "Section B: Statistics", passingScore: 70 },
-      { name: "Section C: Economics", passingScore: 70 }
+      { name: "Section A: Math", passingScore: 60 },
+      { name: "Section B: Statistics", passingScore: 60 },
+      { name: "Section C: Economics", passingScore: 60 }
     ],
     requireAllSections: true
   }
