@@ -10,8 +10,8 @@ const Landing: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-4">
-      <div className="w-full max-w-md mx-auto text-center space-y-4">
-        {/* LSE Logo */}
+      <div className="w-full max-w-md mx-auto text-center space-y-2">
+        {/* LSE Logo - reduced space below logo by changing parent's space-y-4 to space-y-2 */}
         <div className="flex justify-center">
           <img 
             src="/lse-logo.png" 
@@ -19,7 +19,7 @@ const Landing: React.FC = () => {
             onError={(e) => {
               e.currentTarget.src = "https://www.lse.ac.uk/style-assets/images/lse.svg";
             }}
-            className="h-48 object-contain" // Increased from h-40 to h-48
+            className="h-48 object-contain" // Keeping the size at h-48
           />
         </div>
         
@@ -51,9 +51,9 @@ const Landing: React.FC = () => {
           </CardContent>
         </Card>
         
-        {/* Creator credit */}
+        {/* Creator credit - updated with PhD */}
         <div className="mt-8 text-sm text-gray-500">
-          Created by Lazaros-Antonios Chatzilazarou
+          Created by Lazaros-Antonios Chatzilazarou, PhD
         </div>
       </div>
     </div>
