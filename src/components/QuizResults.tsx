@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, Trophy, UserRound, IdCard } from "lucide-react";
+import { ArrowRight, Trophy, UserRound, IdCard, Check, X } from "lucide-react";
 import { StudentInfo } from '@/types/quiz';
 
 interface QuizResultsProps {
@@ -12,6 +12,10 @@ interface QuizResultsProps {
   quizTitle: string;
   quizCategory: "managerial" | "foundational";
   studentInfo: StudentInfo;
+  isEligibleForAdvanced?: boolean;
+  sectionScores?: {[section: string]: {correct: number, total: number, percentage: number}} | null;
+  passedSections?: string[];
+  failedSections?: string[];
 }
 
 const QuizResults: React.FC<QuizResultsProps> = ({
@@ -20,7 +24,11 @@ const QuizResults: React.FC<QuizResultsProps> = ({
   onBack,
   quizTitle,
   quizCategory,
-  studentInfo
+  studentInfo,
+  isEligibleForAdvanced,
+  sectionScores,
+  passedSections,
+  failedSections
 }) => {
   const percentage = Math.round((score / totalQuestions) * 100);
   
@@ -31,13 +39,10 @@ const QuizResults: React.FC<QuizResultsProps> = ({
     message = "Good job! Room for improvement.";
   }
 
-  // Determine eligibility for advanced course (only for managerial quizzes)
-  const isEligibleForAdvanced = quizCategory === "managerial" && percentage >= 70;
-  const eligibilityMessage = quizCategory === "managerial" 
-    ? (isEligibleForAdvanced 
-      ? "You are eligible for the advanced Economics course!" 
-      : "We recommend the standard Economics course for you.")
-    : null;
+  // Determine eligibility recommendation
+  const eligibilityMessage = isEligibleForAdvanced 
+    ? "Congrats, you're eligible for the advanced course!" 
+    : "We recommend the standard Economics course for you.";
 
   return (
     <Card className="max-w-md w-full mx-auto shadow-lg animate-bounce-in border-t-4 border-econ-gold">
@@ -72,11 +77,39 @@ const QuizResults: React.FC<QuizResultsProps> = ({
           </div>
           <p className="text-lg font-medium mb-4">{message}</p>
           
-          {quizCategory === "managerial" && (
-            <div className={`p-4 rounded-lg ${isEligibleForAdvanced ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-yellow-50 text-yellow-800 border border-yellow-200'}`}>
-              <p className="font-medium">{eligibilityMessage}</p>
+          {/* Section Scores */}
+          {sectionScores && Object.keys(sectionScores).length > 0 && (
+            <div className="mt-6 mb-6">
+              <h3 className="font-semibold text-lg mb-2">Section Results</h3>
+              <div className="space-y-3">
+                {Object.entries(sectionScores).map(([section, data]) => (
+                  <div key={section} className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      {passedSections?.includes(section) ? (
+                        <Check className="h-4 w-4 text-green-500 mr-2" />
+                      ) : (
+                        <X className="h-4 w-4 text-red-500 mr-2" />
+                      )}
+                      <span>{section}</span>
+                    </div>
+                    <div>
+                      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                        data.percentage >= 80 ? 'bg-green-100 text-green-800' : 
+                        data.percentage >= 60 ? 'bg-yellow-100 text-yellow-800' : 
+                        'bg-red-100 text-red-800'
+                      }`}>
+                        {data.correct}/{data.total} ({data.percentage}%)
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
+          
+          <div className={`p-4 rounded-lg ${isEligibleForAdvanced ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-yellow-50 text-yellow-800 border border-yellow-200'}`}>
+            <p className="font-medium">{eligibilityMessage}</p>
+          </div>
         </div>
       </CardContent>
       <CardFooter>

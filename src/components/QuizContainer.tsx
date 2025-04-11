@@ -1,12 +1,13 @@
 
-import React, { useState } from "react";
-import { Quiz, StudentInfo } from "../types/quiz";
+import React, { useState, useEffect } from "react";
+import { Quiz, StudentInfo, QuizResult } from "../types/quiz";
 import QuizHeader from "./QuizHeader";
 import QuestionCard from "./QuestionCard";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import QuizResults from "./QuizResults";
 import QuizWelcome from "./QuizWelcome";
+import { useToast } from "@/hooks/use-toast";
 
 interface QuizContainerProps {
   quiz: Quiz;
@@ -24,6 +25,17 @@ const QuizContainer: React.FC<QuizContainerProps> = ({ quiz, onBack, studentInfo
     Array(quiz.questions.length).fill(false)
   );
   const [quizCompleted, setQuizCompleted] = useState(false);
+  const { toast } = useToast();
+  
+  const [currentSection, setCurrentSection] = useState<string | null>(null);
+  
+  // Detect section changes
+  useEffect(() => {
+    const question = quiz.questions[currentQuestionIndex];
+    if (question && question.section !== currentSection) {
+      setCurrentSection(question.section || null);
+    }
+  }, [currentQuestionIndex, quiz.questions, currentSection]);
 
   const handleOptionSelect = (optionIndex: number) => {
     const newSelectedOptions = [...selectedOptions];
@@ -40,6 +52,9 @@ const QuizContainer: React.FC<QuizContainerProps> = ({ quiz, onBack, studentInfo
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
       setQuizCompleted(true);
+      
+      // Save results to localStorage
+      saveQuizResult();
     }
   };
 
@@ -51,6 +66,10 @@ const QuizContainer: React.FC<QuizContainerProps> = ({ quiz, onBack, studentInfo
 
   const handleStartQuiz = () => {
     setQuizStarted(true);
+    toast({
+      title: `Starting ${quiz.title}`,
+      description: "Good luck! Read each question carefully.",
+    });
   };
 
   const calculateScore = () => {
@@ -61,25 +80,162 @@ const QuizContainer: React.FC<QuizContainerProps> = ({ quiz, onBack, studentInfo
       return score;
     }, 0);
   };
+  
+  const calculateSectionScores = () => {
+    if (!quiz.questions.some(q => q.section)) {
+      return null;
+    }
+    
+    // Group questions by section
+    const sectionMap: {[section: string]: {correct: number, total: number, percentage: number}} = {};
+    
+    quiz.questions.forEach((question, index) => {
+      const section = question.section || "General";
+      if (!sectionMap[section]) {
+        sectionMap[section] = {correct: 0, total: 0, percentage: 0};
+      }
+      
+      sectionMap[section].total += 1;
+      if (selectedOptions[index] === question.correctAnswer) {
+        sectionMap[section].correct += 1;
+      }
+    });
+    
+    // Calculate percentages
+    Object.keys(sectionMap).forEach(section => {
+      sectionMap[section].percentage = Math.round((sectionMap[section].correct / sectionMap[section].total) * 100);
+    });
+    
+    return sectionMap;
+  };
+  
+  const determineEligibility = (score: number, totalQuestions: number, sectionScores: any) => {
+    const overallPercentage = Math.round((score / totalQuestions) * 100);
+    
+    // For managerial quizzes, use simple threshold
+    if (quiz.category === "managerial") {
+      return overallPercentage >= 70;
+    }
+    
+    // For sectional quizzes with section config
+    if (quiz.sectionsConfig && sectionScores) {
+      const { sections, requireAllSections } = quiz.sectionsConfig;
+      
+      const passedSections = sections.filter(sectionConfig => {
+        const sectionScore = sectionScores[sectionConfig.name];
+        return sectionScore && sectionScore.percentage >= sectionConfig.passingScore;
+      });
+      
+      // If we need all sections to pass and we passed all sections
+      if (requireAllSections) {
+        return passedSections.length === sections.length && overallPercentage >= (quiz.passingScore || 70);
+      }
+      
+      // If we only need overall score to pass
+      return overallPercentage >= (quiz.passingScore || 70);
+    }
+    
+    // Default threshold
+    return overallPercentage >= 70;
+  };
+  
+  const getSectionResults = (sectionScores: any) => {
+    if (!quiz.sectionsConfig || !sectionScores) {
+      return { passed: [], failed: [] };
+    }
+    
+    const passedSections: string[] = [];
+    const failedSections: string[] = [];
+    
+    quiz.sectionsConfig.sections.forEach(sectionConfig => {
+      const sectionScore = sectionScores[sectionConfig.name];
+      if (sectionScore && sectionScore.percentage >= sectionConfig.passingScore) {
+        passedSections.push(sectionConfig.name);
+      } else {
+        failedSections.push(sectionConfig.name);
+      }
+    });
+    
+    return { passedSections, failedSections };
+  };
+  
+  const saveQuizResult = () => {
+    const score = calculateScore();
+    const sectionScores = calculateSectionScores();
+    const { passedSections, failedSections } = getSectionResults(sectionScores);
+    const isEligible = determineEligibility(score, quiz.questions.length, sectionScores);
+    
+    const result: QuizResult = {
+      studentInfo,
+      quizId: quiz.id,
+      quizTitle: quiz.title,
+      quizCategory: quiz.category,
+      score,
+      totalQuestions: quiz.questions.length,
+      passedSections,
+      failedSections,
+      sectionScores,
+      isEligibleForAdvanced: isEligible,
+      date: new Date()
+    };
+    
+    // Save to localStorage
+    try {
+      // Get existing results or initialize empty array
+      const existingResultsString = localStorage.getItem('studentResults') || '[]';
+      const existingResults: QuizResult[] = JSON.parse(existingResultsString);
+      
+      // Add new result
+      existingResults.push(result);
+      
+      // Save back to localStorage
+      localStorage.setItem('studentResults', JSON.stringify(existingResults));
+      
+      toast({
+        title: "Results saved",
+        description: "Your quiz results have been stored successfully.",
+      });
+    } catch (error) {
+      console.error("Failed to save quiz results:", error);
+      toast({
+        title: "Error saving results",
+        description: "There was a problem storing your quiz results.",
+        variant: "destructive",
+      });
+    }
+    
+    return result;
+  };
 
   if (!quizStarted) {
     return <QuizWelcome quiz={quiz} onStart={handleStartQuiz} />;
   }
 
   if (quizCompleted) {
+    const score = calculateScore();
+    const sectionScores = calculateSectionScores();
+    const { passedSections, failedSections } = getSectionResults(sectionScores);
+    const isEligible = determineEligibility(score, quiz.questions.length, sectionScores);
+    
     return (
       <QuizResults
-        score={calculateScore()}
+        score={score}
         totalQuestions={quiz.questions.length}
         onBack={onBack}
         quizTitle={quiz.title}
         quizCategory={quiz.category}
         studentInfo={studentInfo}
+        sectionScores={sectionScores}
+        passedSections={passedSections}
+        failedSections={failedSections}
+        isEligibleForAdvanced={isEligible}
       />
     );
   }
 
   const currentQuestion = quiz.questions[currentQuestionIndex];
+  const showSectionHeader = currentQuestion.section && (currentQuestionIndex === 0 || 
+    currentQuestion.section !== quiz.questions[Math.max(0, currentQuestionIndex - 1)].section);
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -99,7 +255,16 @@ const QuizContainer: React.FC<QuizContainerProps> = ({ quiz, onBack, studentInfo
         description={quiz.description}
         currentQuestion={currentQuestionIndex + 1}
         totalQuestions={quiz.questions.length}
+        currentSection={currentQuestion.section}
       />
+      
+      {showSectionHeader && currentQuestion.section && (
+        <div className="mb-4 bg-blue-50 rounded-md p-3 border border-blue-100">
+          <h3 className="font-semibold text-econ-navy">
+            Section: {currentQuestion.section}
+          </h3>
+        </div>
+      )}
       
       <QuestionCard
         question={currentQuestion}
