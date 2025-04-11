@@ -73,7 +73,7 @@ const IntroMessage: React.FC<IntroMessageProps> = ({ studentInfo, onContinue }) 
             variant="default" 
             className="w-full bg-econ-accent hover:bg-econ-navy"
           >
-            Continue to Tests <ArrowRight className="w-4 h-4 ml-2" />
+            Continue to Registration <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
         </CardFooter>
       )}

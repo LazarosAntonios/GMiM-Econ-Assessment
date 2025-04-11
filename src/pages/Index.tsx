@@ -9,7 +9,8 @@ import { Quiz, StudentInfo, QuizResult } from "@/types/quiz";
 import StudentRegistration from '@/components/StudentRegistration';
 import IntroMessage from '@/components/IntroMessage';
 import { useToast } from "@/hooks/use-toast";
-import DownloadResults from '@/components/DownloadResults';
+import AdminAuth from '@/components/AdminAuth';
+import AdminDashboard from '@/components/AdminDashboard';
 import { Button } from "@/components/ui/button";
 
 const Index = () => {
@@ -17,6 +18,8 @@ const Index = () => {
   const [selectedQuiz, setSelectedQuiz] = useState<Quiz | null>(null);
   const [quizResults, setQuizResults] = useState<QuizResult[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [showRegistration, setShowRegistration] = useState(false);
+  const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false);
   const { toast } = useToast();
 
   const handleQuizComplete = (result: QuizResult) => {
@@ -25,13 +28,23 @@ const Index = () => {
   };
 
   const handleAdminToggle = () => {
-    setIsAdmin(!isAdmin);
-    toast({
-      title: isAdmin ? "Admin mode disabled" : "Admin mode enabled",
-      description: isAdmin 
-        ? "Export functionality is now hidden" 
-        : "You can now export quiz results",
-    });
+    if (!isAdmin) {
+      setIsAuthDialogOpen(true);
+    } else {
+      setIsAdmin(false);
+      toast({
+        title: "Admin mode disabled",
+        description: "Export functionality is now hidden",
+      });
+    }
+  };
+
+  const handleAdminAuth = (authenticated: boolean) => {
+    setIsAdmin(authenticated);
+  };
+
+  const handleContinueToRegistration = () => {
+    setShowRegistration(true);
   };
 
   // Process props for QuizSelector
@@ -41,21 +54,38 @@ const Index = () => {
     result.quizId === foundationalPreTest.id && result.isEligibleForAdvanced
   );
 
+  // Show admin dashboard directly if in admin mode
+  if (isAdmin) {
+    return <AdminDashboard results={quizResults} onDisableAdmin={handleAdminToggle} />;
+  }
+
   return (
     <div className="container mx-auto py-8 px-4">
+      <AdminAuth 
+        onAuthenticate={handleAdminAuth} 
+        isOpen={isAuthDialogOpen} 
+        onOpenChange={setIsAuthDialogOpen} 
+      />
+
       {!studentInfo ? (
         <>
-          <IntroMessage />
-          <StudentRegistration onSubmit={setStudentInfo} />
-          <div className="mt-8 text-center">
-            <Button 
-              onClick={handleAdminToggle} 
-              variant="outline" 
-              className="text-xs"
-            >
-              {isAdmin ? "Disable Admin Mode" : "Enable Admin Mode"}
-            </Button>
-          </div>
+          {!showRegistration ? (
+            <div className="space-y-6">
+              <IntroMessage onContinue={handleContinueToRegistration} />
+              
+              <div className="mt-8 text-center">
+                <Button 
+                  onClick={handleAdminToggle} 
+                  variant="outline" 
+                  className="text-xs"
+                >
+                  Admin Login
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <StudentRegistration onSubmit={setStudentInfo} />
+          )}
         </>
       ) : (
         <>
@@ -77,14 +107,6 @@ const Index = () => {
                 isEligibleForAdvanced={isEligibleForAdvanced}
                 studentResults={quizResults}
               />
-              
-              <div className="mt-8">
-                <DownloadResults 
-                  results={quizResults} 
-                  studentId={studentInfo.studentId} 
-                  isAdmin={isAdmin}
-                />
-              </div>
             </div>
           ) : (
             <QuizContainer
