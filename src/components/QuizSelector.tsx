@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -88,6 +87,7 @@ const QuizSelector: React.FC<QuizSelectorProps> = ({ quizzes, onSelectQuiz }) =>
         </TabsList>
         
         <TabsContent value="foundational">
+          {/* Pre-Test section - always visible */}
           <div className="mb-6">
             <h2 className="text-xl font-bold mb-4 text-econ-navy">Pre-Test Assessments</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -97,6 +97,7 @@ const QuizSelector: React.FC<QuizSelectorProps> = ({ quizzes, onSelectQuiz }) =>
             </div>
           </div>
           
+          {/* Post-Test section with lock/unlock */}
           <div className="mt-10">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold text-econ-navy">Post-Test Assessments</h2>

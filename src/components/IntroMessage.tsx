@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight } from 'lucide-react';
 import { StudentInfo } from '@/types/quiz';
+import { Separator } from '@/components/ui/separator';
 
 interface IntroMessageProps {
   studentInfo: StudentInfo;
@@ -54,9 +55,15 @@ const IntroMessage: React.FC<IntroMessageProps> = ({ studentInfo, onContinue }) 
           <h4 className="text-lg font-medium mt-4 mb-2">Why It's Optional</h4>
           <p>We recognize some students come in with significant prior knowledge. If that's you, this test provides a chance to demonstrate your proficiency and potentially skip some baseline coursework.</p>
           
-          <p className="mt-6">So, whether you feel like a math wiz or you feel you are exploring uncharted waters, dive in and give it a go. Remember, like Eminem said, if you had one shot, or one opportunity to seize everyhting you ever wanted in one moment, would you capture it or let it slip?</p>
+          <Separator className="my-6" />
           
-          <p className="mt-4">So now, you only get ONE shot for this test, do not miss your chance to grow, this opportunity comes once in a lifetime.</p>
+          <p className="mt-6">So, whether you feel like a math wiz or you feel you are exploring uncharted waters, dive in and give it a go. Remember, like Eminem said:</p>
+          
+          <blockquote className="border-l-4 border-econ-accent pl-4 italic my-4">
+            "If you had one shot, or one opportunity to seize everything you ever wanted in one moment, would you capture it or let it slip?"
+          </blockquote>
+          
+          <p className="mt-4">So now, you only get <strong className="underline">ONE</strong> shot for this test, do not miss your chance to grow, this opportunity comes once in a lifetime.</p>
         </div>
       </CardContent>
       <CardFooter>
