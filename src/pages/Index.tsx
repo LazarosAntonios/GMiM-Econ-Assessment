@@ -41,9 +41,32 @@ const Index = () => {
   }, []);
   
   const handleSelectQuiz = (quizId: number) => {
+    // Check if this is the pre-test (id 101) and if it's already been taken
+    if (quizId === 101 && hasCompletedPreTest) {
+      toast({
+        title: "Pre-Test Already Completed",
+        description: "You've already completed the pre-test and cannot retake it.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     // Check if this is the pre-test (id 101)
     if (quizId === 101) {
       setSelectedQuiz(foundationalPreTest);
+      return;
+    }
+    
+    // Handle post-test with ID 201
+    if (quizId === 201) {
+      // You can define a post-test quiz here or use a placeholder for now
+      const postTest = {
+        ...foundationalPreTest,
+        id: 201,
+        title: "Foundational Economics Post-Test",
+        description: "Final assessment to evaluate your understanding of foundational economic concepts after completing the course."
+      };
+      setSelectedQuiz(postTest);
       return;
     }
     

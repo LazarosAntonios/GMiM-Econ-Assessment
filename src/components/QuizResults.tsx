@@ -2,8 +2,9 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, Trophy, UserRound, IdCard, Check, X } from "lucide-react";
+import { ArrowRight, Trophy, UserRound, IdCard, Check, X, Camera } from "lucide-react";
 import { StudentInfo } from '@/types/quiz';
+import { Separator } from "@/components/ui/separator";
 
 interface QuizResultsProps {
   score: number;
@@ -43,6 +44,11 @@ const QuizResults: React.FC<QuizResultsProps> = ({
   const eligibilityMessage = isEligibleForAdvanced 
     ? "Congrats, you're eligible for the advanced course!" 
     : "We recommend the standard Economics course for you.";
+
+  // Next steps guidance message
+  const nextStepsMessage = isEligibleForAdvanced 
+    ? "You can now proceed to the optional advanced assessments or wait for the post-test (password available in Moodle)."
+    : "Please refresh your skills on Moodle and return to complete the post-test when ready (password available in Moodle).";
 
   return (
     <Card className="max-w-md w-full mx-auto shadow-lg animate-bounce-in border-t-4 border-econ-gold">
@@ -109,6 +115,20 @@ const QuizResults: React.FC<QuizResultsProps> = ({
           
           <div className={`p-4 rounded-lg ${isEligibleForAdvanced ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-yellow-50 text-yellow-800 border border-yellow-200'}`}>
             <p className="font-medium">{eligibilityMessage}</p>
+          </div>
+          
+          <div className="mt-6">
+            <Separator className="my-4" />
+            <h3 className="font-semibold text-lg mb-2">Next Steps</h3>
+            <p className="text-gray-700">{nextStepsMessage}</p>
+            
+            <div className="bg-blue-50 p-4 rounded-lg mt-4 border border-blue-100 flex items-start">
+              <Camera className="h-5 w-5 text-blue-600 mr-2 mt-0.5" />
+              <div>
+                <p className="text-blue-800 font-medium">Important:</p>
+                <p className="text-sm text-blue-700">Please screenshot this page for your records and email it to your instructor.</p>
+              </div>
+            </div>
           </div>
         </div>
       </CardContent>

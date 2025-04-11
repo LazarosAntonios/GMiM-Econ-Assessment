@@ -19,21 +19,25 @@ const QuizHeader: React.FC<QuizHeaderProps> = ({
 }) => {
   return (
     <Card className="border-econ-gold border-b-4 mb-6 shadow-md animate-fade-in">
-      <CardHeader className="bg-econ-navy text-white rounded-t-lg">
+      <CardHeader className="bg-econ-navy text-white rounded-t-lg pb-4">
         <div className="flex justify-between items-center">
           <div>
             <CardTitle className="text-xl md:text-2xl">{title}</CardTitle>
             {currentSection && (
-              <div className="mt-1 text-sm text-gray-300">
+              <div className="mt-2 text-sm inline-flex items-center bg-blue-800/50 px-3 py-1 rounded-full">
+                <span className="w-2 h-2 bg-blue-300 rounded-full mr-2"></span>
                 Section: {currentSection}
               </div>
             )}
           </div>
-          <span className="bg-econ-gold text-econ-navy px-3 py-1 rounded-full font-bold">
-            {currentQuestion} / {totalQuestions}
-          </span>
+          <div className="flex flex-col items-end">
+            <span className="bg-econ-gold text-econ-navy px-3 py-1 rounded-full font-bold">
+              {currentQuestion} / {totalQuestions}
+            </span>
+            {currentSection && <span className="text-xs text-gray-300 mt-1">Progress in current section</span>}
+          </div>
         </div>
-        <CardDescription className="text-gray-300">
+        <CardDescription className="text-gray-300 mt-3">
           {description}
         </CardDescription>
       </CardHeader>

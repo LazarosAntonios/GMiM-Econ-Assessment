@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -27,9 +28,6 @@ const QuizSelector: React.FC<QuizSelectorProps> = ({
   studentResults
 }) => {
   const managerialQuizzes = quizzes.filter(quiz => quiz.category === "managerial");
-  const foundationalQuizzes = quizzes.filter(quiz => quiz.category === "foundational");
-  const preTestQuizzes = foundationalQuizzes.filter(quiz => quiz.title.toLowerCase().includes("pre-test"));
-  const postTestQuizzes = foundationalQuizzes.filter(quiz => quiz.title.toLowerCase().includes("post-test"));
   
   const [showManagerial, setShowManagerial] = useState<boolean>(isEligibleForAdvanced);
   const [postPasskey, setPostPasskey] = useState<string>("");
@@ -45,7 +43,7 @@ const QuizSelector: React.FC<QuizSelectorProps> = ({
     } else {
       toast({
         title: "Invalid Passkey",
-        description: "The passkey you entered is incorrect.",
+        description: "The passkey you entered is incorrect. Please check your Moodle slides for the correct passkey.",
         variant: "destructive",
       });
     }
@@ -107,19 +105,28 @@ const QuizSelector: React.FC<QuizSelectorProps> = ({
                   )}
                 </div>
               </div>
+              <div className="mt-4 bg-blue-50 p-3 rounded-lg text-sm border border-blue-100">
+                <p><strong>Next steps:</strong></p>
+                {preTestStatus.isEligible ? (
+                  <p>You can now continue to the optional advanced assessments or wait for the post-test (password available in Moodle).</p>
+                ) : (
+                  <p>Please refresh your skills on Moodle and return to complete the post-test when ready (password available in Moodle).</p>
+                )}
+                <p className="mt-2 text-xs font-medium">Please screenshot this page for your records and email it to your instructor.</p>
+              </div>
             </CardContent>
           </Card>
         </div>
       )}
       
       {/* Display Advanced Course Option with clear visual separation */}
-      <div className="mb-10 mt-4">
-        <div className="flex items-center mb-6">
-          <h2 className="text-xl font-bold text-econ-navy mr-3">OPTIONAL ASSESSMENTS</h2>
-          <Separator className="flex-grow bg-econ-navy/20" />
-        </div>
-        
-        {(isEligibleForAdvanced || !hasCompletedPreTest) && (
+      {(isEligibleForAdvanced || !hasCompletedPreTest) && (
+        <div className="mb-10 mt-4">
+          <div className="flex items-center mb-6">
+            <h2 className="text-xl font-bold text-econ-navy mr-3">OPTIONAL ASSESSMENTS</h2>
+            <Separator className="flex-grow bg-econ-navy/20" />
+          </div>
+          
           <div className="flex flex-col items-center">
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-5 max-w-md w-full">
               <div className="flex items-start">
@@ -153,8 +160,8 @@ const QuizSelector: React.FC<QuizSelectorProps> = ({
               </div>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Clear separation for mandatory tests section */}
       <div className="mb-8">
@@ -171,7 +178,7 @@ const QuizSelector: React.FC<QuizSelectorProps> = ({
         </TabsList>
         
         <TabsContent value="foundational">
-          {/* Pre-Test section - always visible */}
+          {/* Pre-Test section - only visible if not completed */}
           <div className="mb-6">
             <div className="bg-green-50 border-l-4 border-green-500 p-3 mb-4">
               <h3 className="font-bold text-green-700">REQUIRED: Pre-Test Assessment</h3>
@@ -221,18 +228,14 @@ const QuizSelector: React.FC<QuizSelectorProps> = ({
                   <p className="text-gray-500 mt-2">
                     Your score: {preTestStatus?.score}/{preTestStatus?.totalQuestions} ({preTestStatus?.percentage}%)
                   </p>
+                  <p className="text-sm text-gray-600 mt-3">
+                    You cannot retake the pre-test. {preTestStatus?.isEligible ? 
+                      "You're eligible for the advanced course." : 
+                      "Please follow the standard course track."}
+                  </p>
                 </div>
               )}
             </div>
-            
-            {/* Normal pre-tests from the sample data, if any */}
-            {preTestQuizzes.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-                {preTestQuizzes.map((quiz) => (
-                  <QuizCard key={quiz.id} quiz={quiz} onSelectQuiz={onSelectQuiz} />
-                ))}
-              </div>
-            )}
           </div>
           
           {/* Post-Test section with lock/unlock */}
@@ -243,12 +246,12 @@ const QuizSelector: React.FC<QuizSelectorProps> = ({
             </div>
             
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-econ-navy">Post-Test Assessments</h2>
+              <h2 className="text-xl font-bold text-econ-navy">Post-Test Assessment</h2>
               {!postTestUnlocked && (
                 <div className="flex space-x-2">
                   <Input
                     type="password"
-                    placeholder="Enter passkey to unlock"
+                    placeholder="Enter passkey from Moodle"
                     value={postPasskey}
                     onChange={(e) => setPostPasskey(e.target.value)}
                     className="w-48"
@@ -266,22 +269,36 @@ const QuizSelector: React.FC<QuizSelectorProps> = ({
             </div>
             
             {postTestUnlocked ? (
-              postTestQuizzes.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {postTestQuizzes.map((quiz) => (
-                    <QuizCard key={quiz.id} quiz={quiz} onSelectQuiz={onSelectQuiz} />
-                  ))}
-                </div>
-              ) : (
-                <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center">
-                  <p className="text-gray-600">No post-test assessments are currently available.</p>
-                </div>
-              )
+              <Card className="shadow-md hover:shadow-lg transition-shadow">
+                <CardHeader className="bg-econ-navy text-white rounded-t-lg">
+                  <div className="flex justify-between items-center">
+                    <CardTitle>Foundational Economics Post-Test</CardTitle>
+                    <span className="px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
+                      Foundational
+                    </span>
+                  </div>
+                  <CardDescription className="text-gray-300 flex items-center mt-2">
+                    <Clock className="h-4 w-4 mr-1" /> 60 minutes | 30 questions
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  <p className="text-gray-700">Final assessment to evaluate your understanding of foundational economic concepts after completing the course.</p>
+                </CardContent>
+                <CardFooter>
+                  <Button 
+                    onClick={() => onSelectQuiz(201)} // Use a specific ID for post-test
+                    variant="default" 
+                    className="w-full bg-econ-accent hover:bg-econ-navy"
+                  >
+                    Start Post-Test <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </CardFooter>
+              </Card>
             ) : (
               <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center">
                 <Lock className="w-8 h-8 mx-auto mb-3 text-gray-400" />
                 <h3 className="text-lg font-medium text-gray-700">Post-Test is Locked</h3>
-                <p className="text-gray-500 mt-2">Enter the correct passkey to unlock the post-test assessments.</p>
+                <p className="text-gray-500 mt-2">Enter the correct passkey from your Moodle slides to unlock the post-test assessment.</p>
               </div>
             )}
           </div>
