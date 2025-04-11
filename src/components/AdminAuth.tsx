@@ -19,18 +19,16 @@ const AdminAuth: React.FC<AdminAuthProps> = ({ onAuthenticate, isOpen, onOpenCha
     e.preventDefault();
     
     if (password === "Jarvis") {
+      // Call onAuthenticate with success but don't close the dialog here
+      // Let the parent component handle closing
       onAuthenticate(true);
-      onOpenChange(false);
-      toast({
-        title: "Admin mode enabled",
-        description: "You can now access admin features",
-      });
     } else {
       toast({
         title: "Authentication failed",
         description: "Incorrect password",
         variant: "destructive"
       });
+      onAuthenticate(false);
     }
   };
 
@@ -53,6 +51,7 @@ const AdminAuth: React.FC<AdminAuthProps> = ({ onAuthenticate, isOpen, onOpenCha
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter admin password"
               className="col-span-3"
+              autoFocus
             />
           </div>
           

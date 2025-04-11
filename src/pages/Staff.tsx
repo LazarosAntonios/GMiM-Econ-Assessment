@@ -16,16 +16,19 @@ const Staff: React.FC = () => {
 
   const handleAdminAuth = (authenticated: boolean) => {
     if (authenticated) {
-      setIsAdmin(authenticated);
-      // Automatically close the dialog when successfully authenticated
+      setIsAdmin(true);
       setIsAuthDialogOpen(false);
+      toast({
+        title: "Admin mode enabled",
+        description: "You can now access admin features",
+      });
     } else {
-      navigate('/');
       toast({
         title: "Authentication failed",
         description: "Incorrect password",
         variant: "destructive"
       });
+      // Don't navigate away on failed authentication - let them try again
     }
   };
 
@@ -52,7 +55,7 @@ const Staff: React.FC = () => {
           onOpenChange={(open) => {
             setIsAuthDialogOpen(open);
             if (!open && !isAdmin) {
-              // If dialog is closed and user is not authenticated, go back to landing page
+              // Only navigate away if dialog is closed by user without authenticating
               navigate('/');
             }
           }}
