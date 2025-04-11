@@ -57,7 +57,7 @@ export const sampleQuizzes: Quiz[] = [
   },
   {
     id: 3,
-    title: "Foundational Skills - Mathematics",
+    title: "Foundational Skills - Mathematics Pre-Test",
     description: "Tests fundamental mathematical concepts needed for economics including calculus, algebra, and optimization.",
     category: "foundational",
     duration: 40,
@@ -80,7 +80,7 @@ export const sampleQuizzes: Quiz[] = [
   },
   {
     id: 4,
-    title: "Foundational Skills - Statistics",
+    title: "Foundational Skills - Statistics Pre-Test",
     description: "Tests statistical concepts including probability, distributions, hypothesis testing, and regression analysis.",
     category: "foundational",
     duration: 35,
@@ -98,6 +98,52 @@ export const sampleQuizzes: Quiz[] = [
         options: ["The slope of the regression line", "The correlation coefficient", "The proportion of variance in the dependent variable explained by the model", "The statistical significance of the model"],
         correctAnswer: 2,
         explanation: "R² (R-squared) measures the proportion of variance in the dependent variable that is explained by the independent variable(s) in the model."
+      }
+    ]
+  },
+  {
+    id: 5,
+    title: "Foundational Skills - Mathematics Post-Test",
+    description: "Post-test assessment on mathematical concepts needed for economics including calculus, algebra, and optimization.",
+    category: "foundational",
+    duration: 40,
+    questions: [
+      {
+        id: 1,
+        text: "The derivative of f(x) = ln(x²) with respect to x is:",
+        options: ["1/x", "2/x", "2x/x²", "2ln(x)"],
+        correctAnswer: 1,
+        explanation: "Using the chain rule: f'(x) = (1/x²) · (2x) = 2/x"
+      },
+      {
+        id: 2,
+        text: "If total cost TC = 100 + 5Q + Q² and marginal cost MC = 5 + 2Q, then at Q = 10, average cost equals:",
+        options: ["15", "25", "95", "250"],
+        correctAnswer: 1,
+        explanation: "AC = TC/Q = (100 + 5Q + Q²)/Q = 100/Q + 5 + Q. At Q = 10, AC = 100/10 + 5 + 10 = 10 + 5 + 10 = 25."
+      }
+    ]
+  },
+  {
+    id: 6,
+    title: "Foundational Skills - Statistics Post-Test",
+    description: "Post-test assessment on statistical concepts including probability, distributions, hypothesis testing, and regression analysis.",
+    category: "foundational",
+    duration: 35,
+    questions: [
+      {
+        id: 1,
+        text: "In a multiple regression analysis, multicollinearity refers to:",
+        options: ["The presence of a non-linear relationship", "Correlation between the dependent and independent variables", "High correlation among independent variables", "Heteroscedasticity in the residuals"],
+        correctAnswer: 2,
+        explanation: "Multicollinearity occurs when two or more independent variables in the regression model are highly correlated."
+      },
+      {
+        id: 2,
+        text: "If P(A) = 0.3, P(B) = 0.4, and P(A and B) = 0.12, then P(A|B) equals:",
+        options: ["0.3", "0.4", "0.12", "0.3"],
+        correctAnswer: 3,
+        explanation: "P(A|B) = P(A and B)/P(B) = 0.12/0.4 = 0.3"
       }
     ]
   }

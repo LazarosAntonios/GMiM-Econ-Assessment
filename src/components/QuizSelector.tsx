@@ -130,11 +130,17 @@ const QuizSelector: React.FC<QuizSelectorProps> = ({ quizzes, onSelectQuiz }) =>
             </div>
             
             {postTestUnlocked ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {postTestQuizzes.map((quiz) => (
-                  <QuizCard key={quiz.id} quiz={quiz} onSelectQuiz={onSelectQuiz} />
-                ))}
-              </div>
+              postTestQuizzes.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {postTestQuizzes.map((quiz) => (
+                    <QuizCard key={quiz.id} quiz={quiz} onSelectQuiz={onSelectQuiz} />
+                  ))}
+                </div>
+              ) : (
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center">
+                  <p className="text-gray-600">No post-test assessments are currently available.</p>
+                </div>
+              )
             ) : (
               <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center">
                 <Lock className="w-8 h-8 mx-auto mb-3 text-gray-400" />
