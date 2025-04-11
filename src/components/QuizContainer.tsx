@@ -12,9 +12,10 @@ interface QuizContainerProps {
   quiz: Quiz;
   onBack: () => void;
   studentInfo: StudentInfo;
+  onComplete?: (result: QuizResult) => void;
 }
 
-const QuizContainer: React.FC<QuizContainerProps> = ({ quiz, onBack, studentInfo }) => {
+const QuizContainer: React.FC<QuizContainerProps> = ({ quiz, onBack, studentInfo, onComplete }) => {
   const [quizStarted, setQuizStarted] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState<(number | null)[]>(
@@ -51,7 +52,10 @@ const QuizContainer: React.FC<QuizContainerProps> = ({ quiz, onBack, studentInfo
     } else {
       setQuizCompleted(true);
       
-      saveQuizResult();
+      const result = saveQuizResult();
+      if (onComplete) {
+        onComplete(result);
+      }
     }
   };
 

@@ -34,6 +34,13 @@ const Index = () => {
     });
   };
 
+  // Process props for QuizSelector
+  const completedQuizIds = quizResults.map(result => result.quizId);
+  const hasCompletedPreTest = completedQuizIds.includes(foundationalPreTest.id);
+  const isEligibleForAdvanced = quizResults.some(result => 
+    result.quizId === foundationalPreTest.id && result.isEligibleForAdvanced
+  );
+
   return (
     <div className="container mx-auto py-8 px-4">
       {!studentInfo ? (
@@ -55,14 +62,20 @@ const Index = () => {
           {!selectedQuiz ? (
             <div className="space-y-6">
               <QuizSelector
-                studentInfo={studentInfo}
-                onSelectQuiz={(quiz) => setSelectedQuiz(quiz)}
-                availableQuizzes={[
-                  foundationalPreTest,
-                  foundationalPostTest,
-                  ...sampleQuizzes
-                ]}
-                completedQuizzes={quizResults.map(result => result.quizId)}
+                quizzes={sampleQuizzes}
+                preTest={foundationalPreTest}
+                postTest={foundationalPostTest}
+                onSelectQuiz={(quizId) => {
+                  const quiz = [
+                    foundationalPreTest, 
+                    foundationalPostTest, 
+                    ...sampleQuizzes
+                  ].find(q => q.id === quizId);
+                  if (quiz) setSelectedQuiz(quiz);
+                }}
+                hasCompletedPreTest={hasCompletedPreTest}
+                isEligibleForAdvanced={isEligibleForAdvanced}
+                studentResults={quizResults}
               />
               
               <div className="mt-8">
@@ -77,7 +90,6 @@ const Index = () => {
             <QuizContainer
               quiz={selectedQuiz}
               studentInfo={studentInfo}
-              onComplete={handleQuizComplete}
               onBack={() => setSelectedQuiz(null)}
             />
           )}
