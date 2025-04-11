@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Quiz, StudentInfo, QuizResult } from "../types/quiz";
 import QuizHeader from "./QuizHeader";
@@ -29,7 +28,6 @@ const QuizContainer: React.FC<QuizContainerProps> = ({ quiz, onBack, studentInfo
   
   const [currentSection, setCurrentSection] = useState<string | null>(null);
   
-  // Detect section changes
   useEffect(() => {
     const question = quiz.questions[currentQuestionIndex];
     if (question && question.section !== currentSection) {
@@ -53,7 +51,6 @@ const QuizContainer: React.FC<QuizContainerProps> = ({ quiz, onBack, studentInfo
     } else {
       setQuizCompleted(true);
       
-      // Save results to localStorage
       saveQuizResult();
     }
   };
@@ -86,7 +83,6 @@ const QuizContainer: React.FC<QuizContainerProps> = ({ quiz, onBack, studentInfo
       return null;
     }
     
-    // Group questions by section
     const sectionMap: {[section: string]: {correct: number, total: number, percentage: number}} = {};
     
     quiz.questions.forEach((question, index) => {
@@ -101,7 +97,6 @@ const QuizContainer: React.FC<QuizContainerProps> = ({ quiz, onBack, studentInfo
       }
     });
     
-    // Calculate percentages
     Object.keys(sectionMap).forEach(section => {
       sectionMap[section].percentage = Math.round((sectionMap[section].correct / sectionMap[section].total) * 100);
     });
@@ -112,12 +107,10 @@ const QuizContainer: React.FC<QuizContainerProps> = ({ quiz, onBack, studentInfo
   const determineEligibility = (score: number, totalQuestions: number, sectionScores: any) => {
     const overallPercentage = Math.round((score / totalQuestions) * 100);
     
-    // For managerial quizzes, use simple threshold
     if (quiz.category === "managerial") {
       return overallPercentage >= 70;
     }
     
-    // For sectional quizzes with section config
     if (quiz.sectionsConfig && sectionScores) {
       const { sections, requireAllSections } = quiz.sectionsConfig;
       
@@ -126,16 +119,13 @@ const QuizContainer: React.FC<QuizContainerProps> = ({ quiz, onBack, studentInfo
         return sectionScore && sectionScore.percentage >= sectionConfig.passingScore;
       });
       
-      // If we need all sections to pass and we passed all sections
       if (requireAllSections) {
         return passedSections.length === sections.length && overallPercentage >= (quiz.passingScore || 70);
       }
       
-      // If we only need overall score to pass
       return overallPercentage >= (quiz.passingScore || 70);
     }
     
-    // Default threshold
     return overallPercentage >= 70;
   };
   
@@ -179,16 +169,12 @@ const QuizContainer: React.FC<QuizContainerProps> = ({ quiz, onBack, studentInfo
       date: new Date()
     };
     
-    // Save to localStorage
     try {
-      // Get existing results or initialize empty array
       const existingResultsString = localStorage.getItem('studentResults') || '[]';
       const existingResults: QuizResult[] = JSON.parse(existingResultsString);
       
-      // Add new result
       existingResults.push(result);
       
-      // Save back to localStorage
       localStorage.setItem('studentResults', JSON.stringify(existingResults));
       
       toast({

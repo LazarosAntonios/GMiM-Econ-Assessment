@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { sampleQuizzes } from "@/data/sampleQuizzes";
 import { foundationalPreTest } from "@/data/preTestQuiz";
@@ -9,6 +8,7 @@ import { Quiz, StudentInfo, QuizResult } from "@/types/quiz";
 import StudentRegistration from '@/components/StudentRegistration';
 import IntroMessage from '@/components/IntroMessage';
 import { useToast } from "@/hooks/use-toast";
+import DownloadResults from '@/components/DownloadResults';
 
 const Index = () => {
   const [selectedQuiz, setSelectedQuiz] = useState<Quiz | null>(null);
@@ -17,7 +17,6 @@ const Index = () => {
   const [storedResults, setStoredResults] = useState<QuizResult[]>([]);
   const { toast } = useToast();
   
-  // On mount, check if we have student info and results stored
   useEffect(() => {
     const savedStudentInfo = localStorage.getItem('studentInfo');
     const savedResults = localStorage.getItem('studentResults');
@@ -42,7 +41,6 @@ const Index = () => {
   }, []);
   
   const handleSelectQuiz = (quizId: number) => {
-    // Check if this is the pre-test (id 101) and if it's already been taken
     if (quizId === 101 && hasCompletedPreTest) {
       toast({
         title: "Pre-Test Already Completed",
@@ -52,13 +50,11 @@ const Index = () => {
       return;
     }
     
-    // Check if this is the pre-test (id 101)
     if (quizId === 101) {
       setSelectedQuiz(foundationalPreTest);
       return;
     }
     
-    // Handle post-test with ID 201
     if (quizId === 201) {
       setSelectedQuiz(foundationalPostTest);
       return;
@@ -71,7 +67,6 @@ const Index = () => {
   };
   
   const handleBackToQuizzes = () => {
-    // Refresh stored results when going back to quiz selector
     const savedResults = localStorage.getItem('studentResults');
     if (savedResults) {
       try {
@@ -89,7 +84,6 @@ const Index = () => {
     setStudentInfo(info);
     setShowIntro(true);
     
-    // Store student info in localStorage
     localStorage.setItem('studentInfo', JSON.stringify(info));
     
     toast({
@@ -102,10 +96,8 @@ const Index = () => {
     setShowIntro(false);
   };
   
-  // Check if student has already completed the pre-test
   const hasCompletedPreTest = storedResults.some(result => result.quizId === foundationalPreTest.id);
   
-  // Check eligibility status based on results
   const isEligibleForAdvanced = storedResults.some(result => result.isEligibleForAdvanced);
   
   return (
@@ -121,15 +113,32 @@ const Index = () => {
           studentInfo={studentInfo}
         />
       ) : (
-        <QuizSelector 
-          quizzes={sampleQuizzes}
-          preTest={foundationalPreTest}
-          postTest={foundationalPostTest}
-          onSelectQuiz={handleSelectQuiz} 
-          hasCompletedPreTest={hasCompletedPreTest}
-          isEligibleForAdvanced={isEligibleForAdvanced}
-          studentResults={storedResults}
-        />
+        <div className="space-y-6">
+          <QuizSelector 
+            quizzes={sampleQuizzes}
+            preTest={foundationalPreTest}
+            postTest={foundationalPostTest}
+            onSelectQuiz={handleSelectQuiz} 
+            hasCompletedPreTest={hasCompletedPreTest}
+            isEligibleForAdvanced={isEligibleForAdvanced}
+            studentResults={storedResults}
+          />
+          
+          {studentInfo && storedResults.length > 0 && (
+            <div className="max-w-3xl mx-auto mt-8 p-4 bg-white rounded-lg shadow-md">
+              <h3 className="text-lg font-medium mb-4">Export Your Results</h3>
+              <div className="flex justify-between items-center">
+                <p className="text-sm text-gray-500">
+                  Download all your quiz results in CSV format for analysis
+                </p>
+                <DownloadResults 
+                  results={storedResults} 
+                  studentId={studentInfo.studentId}
+                />
+              </div>
+            </div>
+          )}
+        </div>
       )}
     </div>
   );
