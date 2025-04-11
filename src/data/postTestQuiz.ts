@@ -325,7 +325,7 @@ export const foundationalPostTest: Quiz = {
     }
   ],
   isPostTest: true,
-  passingScore: 75,
+  passingScore: 60, // Updated from 75% to 60%
   sectionsConfig: {
     sections: [
       { name: "Section A: Math", passingScore: 70 },
