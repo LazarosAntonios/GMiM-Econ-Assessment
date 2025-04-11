@@ -7,8 +7,8 @@ import { StudentInfo } from '@/types/quiz';
 import { Separator } from '@/components/ui/separator';
 
 interface IntroMessageProps {
-  studentInfo: StudentInfo;
-  onContinue: () => void;
+  studentInfo?: StudentInfo; // Make studentInfo optional
+  onContinue?: () => void; // Make onContinue optional
 }
 
 const IntroMessage: React.FC<IntroMessageProps> = ({ studentInfo, onContinue }) => {
@@ -17,7 +17,7 @@ const IntroMessage: React.FC<IntroMessageProps> = ({ studentInfo, onContinue }) 
       <CardHeader className="bg-econ-navy text-white rounded-t-lg">
         <CardTitle className="text-2xl">Welcome to LSE MiM Economics Assessment</CardTitle>
         <CardDescription className="text-gray-300">
-          Hello {studentInfo.name} (ID: {studentInfo.studentId})
+          {studentInfo ? `Hello ${studentInfo.name} (ID: ${studentInfo.studentId})` : "Please register to continue"}
         </CardDescription>
       </CardHeader>
       <CardContent className="pt-6">
@@ -66,15 +66,17 @@ const IntroMessage: React.FC<IntroMessageProps> = ({ studentInfo, onContinue }) 
           <p className="mt-4">So now, you only get <strong className="underline">ONE</strong> shot for this test, do not miss your chance to grow, this opportunity comes once in a lifetime.</p>
         </div>
       </CardContent>
-      <CardFooter>
-        <Button 
-          onClick={onContinue}
-          variant="default" 
-          className="w-full bg-econ-accent hover:bg-econ-navy"
-        >
-          Continue to Tests <ArrowRight className="w-4 h-4 ml-2" />
-        </Button>
-      </CardFooter>
+      {onContinue && (
+        <CardFooter>
+          <Button 
+            onClick={onContinue}
+            variant="default" 
+            className="w-full bg-econ-accent hover:bg-econ-navy"
+          >
+            Continue to Tests <ArrowRight className="w-4 h-4 ml-2" />
+          </Button>
+        </CardFooter>
+      )}
     </Card>
   );
 };

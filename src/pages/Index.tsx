@@ -13,7 +13,6 @@ import DownloadResults from '@/components/DownloadResults';
 import { Button } from "@/components/ui/button";
 
 const Index = () => {
-  // Add component implementation here
   const [studentInfo, setStudentInfo] = useState<StudentInfo | null>(null);
   const [selectedQuiz, setSelectedQuiz] = useState<Quiz | null>(null);
   const [quizResults, setQuizResults] = useState<QuizResult[]>([]);
@@ -57,7 +56,7 @@ const Index = () => {
             <div className="space-y-6">
               <QuizSelector
                 studentInfo={studentInfo}
-                onSelectQuiz={setSelectedQuiz}
+                onSelectQuiz={(quiz) => setSelectedQuiz(quiz)}
                 availableQuizzes={[
                   foundationalPreTest,
                   foundationalPostTest,
@@ -88,5 +87,4 @@ const Index = () => {
   );
 };
 
-// Export as default
 export default Index;
