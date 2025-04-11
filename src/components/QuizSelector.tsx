@@ -2,10 +2,12 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, BookOpen, Clock, BookOpen as BookIcon } from "lucide-react";
+import { ArrowRight, BookOpen, Clock, BookOpen as BookIcon, Lock, Unlock } from "lucide-react";
 import { Quiz } from '@/types/quiz';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { toast } from "@/components/ui/use-toast";
 
 interface QuizSelectorProps {
   quizzes: Quiz[];
@@ -15,7 +17,28 @@ interface QuizSelectorProps {
 const QuizSelector: React.FC<QuizSelectorProps> = ({ quizzes, onSelectQuiz }) => {
   const managerialQuizzes = quizzes.filter(quiz => quiz.category === "managerial");
   const foundationalQuizzes = quizzes.filter(quiz => quiz.category === "foundational");
+  const preTestQuizzes = foundationalQuizzes.filter(quiz => quiz.title.toLowerCase().includes("pre-test"));
+  const postTestQuizzes = foundationalQuizzes.filter(quiz => quiz.title.toLowerCase().includes("post-test"));
+  
   const [showManagerial, setShowManagerial] = useState<boolean>(false);
+  const [postPasskey, setPostPasskey] = useState<string>("");
+  const [postTestUnlocked, setPostTestUnlocked] = useState<boolean>(false);
+  
+  const handleUnlockPostTest = () => {
+    if (postPasskey === "PASS") {
+      setPostTestUnlocked(true);
+      toast({
+        title: "Post-Test Unlocked",
+        description: "You now have access to the post-test assessment.",
+      });
+    } else {
+      toast({
+        title: "Invalid Passkey",
+        description: "The passkey you entered is incorrect.",
+        variant: "destructive",
+      });
+    }
+  };
   
   return (
     <div className="container mx-auto py-10 animate-fade-in">
@@ -65,10 +88,52 @@ const QuizSelector: React.FC<QuizSelectorProps> = ({ quizzes, onSelectQuiz }) =>
         </TabsList>
         
         <TabsContent value="foundational">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {foundationalQuizzes.map((quiz) => (
-              <QuizCard key={quiz.id} quiz={quiz} onSelectQuiz={onSelectQuiz} />
-            ))}
+          <div className="mb-6">
+            <h2 className="text-xl font-bold mb-4 text-econ-navy">Pre-Test Assessments</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {preTestQuizzes.map((quiz) => (
+                <QuizCard key={quiz.id} quiz={quiz} onSelectQuiz={onSelectQuiz} />
+              ))}
+            </div>
+          </div>
+          
+          <div className="mt-10">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-econ-navy">Post-Test Assessments</h2>
+              {!postTestUnlocked && (
+                <div className="flex space-x-2">
+                  <Input
+                    type="password"
+                    placeholder="Enter passkey to unlock"
+                    value={postPasskey}
+                    onChange={(e) => setPostPasskey(e.target.value)}
+                    className="w-48"
+                  />
+                  <Button onClick={handleUnlockPostTest} size="sm">
+                    <Lock className="w-4 h-4 mr-2" /> Unlock
+                  </Button>
+                </div>
+              )}
+              {postTestUnlocked && (
+                <Badge className="bg-green-100 text-green-800 flex items-center">
+                  <Unlock className="w-4 h-4 mr-1" /> Unlocked
+                </Badge>
+              )}
+            </div>
+            
+            {postTestUnlocked ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {postTestQuizzes.map((quiz) => (
+                  <QuizCard key={quiz.id} quiz={quiz} onSelectQuiz={onSelectQuiz} />
+                ))}
+              </div>
+            ) : (
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center">
+                <Lock className="w-8 h-8 mx-auto mb-3 text-gray-400" />
+                <h3 className="text-lg font-medium text-gray-700">Post-Test is Locked</h3>
+                <p className="text-gray-500 mt-2">Enter the correct passkey to unlock the post-test assessments.</p>
+              </div>
+            )}
           </div>
         </TabsContent>
         

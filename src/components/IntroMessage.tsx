@@ -21,9 +21,9 @@ const IntroMessage: React.FC<IntroMessageProps> = ({ studentInfo, onContinue }) 
       </CardHeader>
       <CardContent className="pt-6">
         <div className="prose max-w-none">
-          <p className="text-lg font-medium mb-4">Hello everyone,</p>
+          <p className="text-lg font-medium mb-4">Hey you!,</p>
           
-          <p>Welcome to LSE and, in particular, to our MiM program! My name is Lazaros, and like a less privileged Tony Stark I built my own dumb Jarvis. I'm here to introduce you two different Economics-related tests you'll encounter before the program starts:</p>
+          <p>Welcome to LSE and, in particular, to the MiM program! My name is Lazaros, and just like a less privileged Tony Stark I built my own dumb Jarvis - the Manager's Test. I'm here to introduce you two different Economics-related tests you'll encounter before the program starts:</p>
           
           <h3 className="text-xl font-semibold mt-6 mb-3">1. Mandatory Foundational Test (Pre- and Post-)</h3>
           
@@ -38,7 +38,7 @@ const IntroMessage: React.FC<IntroMessageProps> = ({ studentInfo, onContinue }) 
           </ul>
           
           <h4 className="text-lg font-medium mt-4 mb-2">Why It Matters</h4>
-          <p>The Foundational Test ensures everyone enters the program on relatively equal footing—so we can spend more time in MG464 on deeper, more interesting applications of Managerial Economics!</p>
+          <p>The Foundational Test ensures everyone enters the program on relatively equal footing—so we can spend more time in class on deeper, more interesting applications of Managerial Economics!</p>
           
           <h3 className="text-xl font-semibold mt-6 mb-3">2. Optional Managerial Economics Test (Advanced Placement)</h3>
           
@@ -53,6 +53,10 @@ const IntroMessage: React.FC<IntroMessageProps> = ({ studentInfo, onContinue }) 
           
           <h4 className="text-lg font-medium mt-4 mb-2">Why It's Optional</h4>
           <p>We recognize some students come in with significant prior knowledge. If that's you, this test provides a chance to demonstrate your proficiency and potentially skip some baseline coursework.</p>
+          
+          <p className="mt-6">So, whether you feel like a math wiz or you feel you are exploring uncharted waters, dive in and give it a go. Remember, like Eminem said, if you had one shot, or one opportunity to seize everyhting you ever wanted in one moment, would you capture it or let it slip?</p>
+          
+          <p className="mt-4">So now, you only get ONE shot for this test, do not miss your chance to grow, this opportunity comes once in a lifetime.</p>
         </div>
       </CardContent>
       <CardFooter>
