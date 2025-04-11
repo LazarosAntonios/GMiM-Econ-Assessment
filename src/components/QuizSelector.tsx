@@ -1,14 +1,12 @@
 
 import React, { useState } from 'react';
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, BookOpen, Clock, BookOpen as BookIcon, Lock, Unlock, AlertTriangle, CheckCircle } from "lucide-react";
 import { Quiz, QuizResult } from '@/types/quiz';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { toast } from "@/components/ui/use-toast";
+import PreTestStatusCard from './quiz-selector/PreTestStatusCard';
+import AdvancedAssessmentToggle from './quiz-selector/AdvancedAssessmentToggle';
+import FoundationalQuizTab from './quiz-selector/FoundationalQuizTab';
+import ManagerialQuizTab from './quiz-selector/ManagerialQuizTab';
 
 interface QuizSelectorProps {
   quizzes: Quiz[];
@@ -30,26 +28,7 @@ const QuizSelector: React.FC<QuizSelectorProps> = ({
   studentResults
 }) => {
   const managerialQuizzes = quizzes.filter(quiz => quiz.category === "managerial");
-  
   const [showManagerial, setShowManagerial] = useState<boolean>(isEligibleForAdvanced);
-  const [postPasskey, setPostPasskey] = useState<string>("");
-  const [postTestUnlocked, setPostTestUnlocked] = useState<boolean>(false);
-  
-  const handleUnlockPostTest = () => {
-    if (postPasskey === "PASS") {
-      setPostTestUnlocked(true);
-      toast({
-        title: "Post-Test Unlocked",
-        description: "You now have access to the post-test assessment.",
-      });
-    } else {
-      toast({
-        title: "Invalid Passkey",
-        description: "The passkey you entered is incorrect. Please check your Moodle slides for the correct passkey.",
-        variant: "destructive",
-      });
-    }
-  };
   
   const getPreTestStatus = () => {
     const result = studentResults.find(r => r.quizId === preTest.id);
@@ -76,93 +55,15 @@ const QuizSelector: React.FC<QuizSelectorProps> = ({
       </p>
       
       {/* Display Pre-Test Status if completed */}
-      {preTestStatus && (
-        <div className="mb-8 max-w-lg mx-auto">
-          <Card className="border-l-4 border-econ-navy">
-            <CardHeader className="pb-2">
-              <div className="flex justify-between items-center">
-                <CardTitle className="text-lg">Pre-Test Results</CardTitle>
-                <Badge variant="outline" className={preTestStatus.isEligible ? 
-                  "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"}>
-                  {preTestStatus.isEligible ? "Advanced Eligible" : "Standard Track"}
-                </Badge>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="flex justify-between items-center">
-                <div>
-                  <p className="text-gray-600">
-                    Score: <span className="font-bold">{preTestStatus.score}/{preTestStatus.totalQuestions}</span> ({preTestStatus.percentage}%)
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    Completed on {preTestStatus.date.toLocaleDateString()}
-                  </p>
-                </div>
-                <div className={`p-2 rounded-lg ${preTestStatus.isEligible ? 
-                  'bg-green-50 text-green-700' : 'bg-yellow-50 text-yellow-700'}`}>
-                  {preTestStatus.isEligible ? (
-                    <p className="text-sm font-medium flex items-center"><CheckCircle className="h-4 w-4 mr-1" /> Eligible for advanced course</p>
-                  ) : (
-                    <p className="text-sm font-medium flex items-center"><AlertTriangle className="h-4 w-4 mr-1" /> Standard course recommended</p>
-                  )}
-                </div>
-              </div>
-              <div className="mt-4 bg-blue-50 p-3 rounded-lg text-sm border border-blue-100">
-                <p><strong>Next steps:</strong></p>
-                {preTestStatus.isEligible ? (
-                  <p>You can now continue to the optional advanced assessments or wait for the post-test (password available in Moodle).</p>
-                ) : (
-                  <p>Please refresh your skills on Moodle and return to complete the post-test when ready (password available in Moodle).</p>
-                )}
-                <p className="mt-2 text-xs font-medium">Please screenshot this page for your records and email it to your instructor.</p>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      )}
+      <PreTestStatusCard preTestStatus={preTestStatus} />
       
       {/* Display Advanced Course Option with clear visual separation */}
       {(isEligibleForAdvanced || !hasCompletedPreTest) && (
-        <div className="mb-10 mt-4">
-          <div className="flex items-center mb-6">
-            <h2 className="text-xl font-bold text-econ-navy mr-3">OPTIONAL ASSESSMENTS</h2>
-            <Separator className="flex-grow bg-econ-navy/20" />
-          </div>
-          
-          <div className="flex flex-col items-center">
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-5 max-w-md w-full">
-              <div className="flex items-start">
-                <Badge variant="outline" className="bg-blue-100 text-blue-800 mr-2 mt-1">
-                  {isEligibleForAdvanced ? "Available" : "Optional"}
-                </Badge>
-                <div>
-                  <h3 className="font-semibold text-econ-navy">Managerial Economics Assessment</h3>
-                  <p className="text-sm text-gray-600 mb-3">
-                    For students with prior economics knowledge who may qualify for advanced placement.
-                  </p>
-                  {!showManagerial ? (
-                    <Button 
-                      onClick={() => setShowManagerial(true)} 
-                      variant="outline"
-                      className="text-sm border-econ-navy text-econ-navy hover:bg-econ-navy hover:text-white"
-                    >
-                      <BookIcon className="mr-2 h-4 w-4" />
-                      Enroll in Advanced Assessment
-                    </Button>
-                  ) : (
-                    <Button 
-                      onClick={() => setShowManagerial(false)} 
-                      variant="outline"
-                      className="text-sm border-gray-400 text-gray-500"
-                    >
-                      Hide Advanced Assessment
-                    </Button>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <AdvancedAssessmentToggle 
+          isEligibleForAdvanced={isEligibleForAdvanced}
+          showManagerial={showManagerial}
+          setShowManagerial={setShowManagerial}
+        />
       )}
 
       {/* Clear separation for mandatory tests section */}
@@ -180,190 +81,25 @@ const QuizSelector: React.FC<QuizSelectorProps> = ({
         </TabsList>
         
         <TabsContent value="foundational">
-          {/* Pre-Test section - only visible if not completed */}
-          <div className="mb-6">
-            <div className="bg-green-50 border-l-4 border-green-500 p-3 mb-4">
-              <h3 className="font-bold text-green-700">REQUIRED: Pre-Test Assessment</h3>
-              <p className="text-sm text-green-600">All students must complete the pre-test to determine course eligibility</p>
-            </div>
-            
-            {/* Show the comprehensive pre-test */}
-            <div className="mb-8">
-              {!hasCompletedPreTest ? (
-                <Card className="shadow-md hover:shadow-lg transition-shadow">
-                  <CardHeader className="bg-econ-navy text-white rounded-t-lg">
-                    <div className="flex justify-between items-center">
-                      <CardTitle>{preTest.title}</CardTitle>
-                      <span className="px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
-                        Foundational
-                      </span>
-                    </div>
-                    <CardDescription className="text-gray-300 flex items-center mt-2">
-                      <Clock className="h-4 w-4 mr-1" /> {preTest.duration} minutes | {preTest.questions.length} questions
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="pt-4">
-                    <p className="text-gray-700">{preTest.description}</p>
-                    <div className="bg-yellow-50 border border-yellow-200 rounded p-3 mt-4">
-                      <div className="flex items-start">
-                        <AlertTriangle className="h-4 w-4 text-yellow-600 mr-2 mt-1" />
-                        <p className="text-sm text-yellow-700">
-                          You'll have <strong>ONE</strong> attempt to complete this test. Results will determine your course eligibility.
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                  <CardFooter>
-                    <Button 
-                      onClick={() => onSelectQuiz(preTest.id)} 
-                      variant="default" 
-                      className="w-full bg-econ-accent hover:bg-econ-navy"
-                    >
-                      Take Pre-Test <ArrowRight className="w-4 h-4 ml-2" />
-                    </Button>
-                  </CardFooter>
-                </Card>
-              ) : (
-                <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center">
-                  <CheckCircle className="h-12 w-12 mx-auto mb-2 text-green-500" />
-                  <h3 className="text-lg font-medium text-gray-700">You've completed the pre-test</h3>
-                  <p className="text-gray-500 mt-2">
-                    Your score: {preTestStatus?.score}/{preTestStatus?.totalQuestions} ({preTestStatus?.percentage}%)
-                  </p>
-                  <p className="text-sm text-gray-600 mt-3">
-                    You cannot retake the pre-test. {preTestStatus?.isEligible ? 
-                      "You're eligible for the advanced course." : 
-                      "Please follow the standard course track."}
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-          
-          {/* Post-Test section with lock/unlock */}
-          <div className="mt-10">
-            <div className="bg-green-50 border-l-4 border-green-500 p-3 mb-4">
-              <h3 className="font-bold text-green-700">REQUIRED: Post-Test Assessment</h3>
-              <p className="text-sm text-green-600">Complete the post-test when instructed by your course coordinator</p>
-            </div>
-            
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-econ-navy">Post-Test Assessment</h2>
-              {!postTestUnlocked && (
-                <div className="flex space-x-2">
-                  <Input
-                    type="password"
-                    placeholder="Enter passkey from Moodle"
-                    value={postPasskey}
-                    onChange={(e) => setPostPasskey(e.target.value)}
-                    className="w-48"
-                  />
-                  <Button onClick={handleUnlockPostTest} size="sm">
-                    <Lock className="w-4 h-4 mr-2" /> Unlock
-                  </Button>
-                </div>
-              )}
-              {postTestUnlocked && (
-                <Badge className="bg-green-100 text-green-800 flex items-center">
-                  <Unlock className="w-4 h-4 mr-1" /> Unlocked
-                </Badge>
-              )}
-            </div>
-            
-            {postTestUnlocked ? (
-              <Card className="shadow-md hover:shadow-lg transition-shadow">
-                <CardHeader className="bg-econ-navy text-white rounded-t-lg">
-                  <div className="flex justify-between items-center">
-                    <CardTitle>{postTest.title}</CardTitle>
-                    <span className="px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
-                      Foundational
-                    </span>
-                  </div>
-                  <CardDescription className="text-gray-300 flex items-center mt-2">
-                    <Clock className="h-4 w-4 mr-1" /> {postTest.duration} minutes | {postTest.questions.length} questions
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="pt-4">
-                  <p className="text-gray-700">{postTest.description}</p>
-                  <div className="bg-yellow-50 border border-yellow-200 rounded p-3 mt-4">
-                    <div className="flex items-start">
-                      <AlertTriangle className="h-4 w-4 text-yellow-600 mr-2 mt-1" />
-                      <p className="text-sm text-yellow-700">
-                        This is the final course assessment with a higher passing threshold (75%). It covers Math, Statistics, and Economics.
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button 
-                    onClick={() => onSelectQuiz(postTest.id)} 
-                    variant="default" 
-                    className="w-full bg-econ-accent hover:bg-econ-navy"
-                  >
-                    Start Post-Test <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-                </CardFooter>
-              </Card>
-            ) : (
-              <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center">
-                <Lock className="w-8 h-8 mx-auto mb-3 text-gray-400" />
-                <h3 className="text-lg font-medium text-gray-700">Post-Test is Locked</h3>
-                <p className="text-gray-500 mt-2">Enter the correct passkey from your Moodle slides to unlock the post-test assessment.</p>
-              </div>
-            )}
-          </div>
+          <FoundationalQuizTab 
+            preTest={preTest}
+            postTest={postTest}
+            hasCompletedPreTest={hasCompletedPreTest}
+            onSelectQuiz={onSelectQuiz}
+            preTestStatus={preTestStatus}
+          />
         </TabsContent>
         
         {showManagerial && (
           <TabsContent value="managerial">
-            <div className="bg-blue-50 border-l-4 border-blue-500 p-3 mb-4">
-              <h3 className="font-bold text-blue-700">OPTIONAL: Advanced Course Assessments</h3>
-              <p className="text-sm text-blue-600">These assessments are optional and recommended for students eligible for the advanced track</p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {managerialQuizzes.map((quiz) => (
-                <QuizCard key={quiz.id} quiz={quiz} onSelectQuiz={onSelectQuiz} />
-              ))}
-            </div>
+            <ManagerialQuizTab 
+              managerialQuizzes={managerialQuizzes}
+              onSelectQuiz={onSelectQuiz}
+            />
           </TabsContent>
         )}
       </Tabs>
     </div>
-  );
-};
-
-const QuizCard = ({ quiz, onSelectQuiz }: { quiz: Quiz, onSelectQuiz: (id: number) => void }) => {
-  const categoryBadgeClass = quiz.category === "managerial" 
-    ? "bg-blue-100 text-blue-800" 
-    : "bg-green-100 text-green-800";
-  
-  return (
-    <Card key={quiz.id} className="shadow-md hover:shadow-lg transition-shadow">
-      <CardHeader className="bg-econ-navy text-white rounded-t-lg">
-        <div className="flex justify-between items-center">
-          <CardTitle>{quiz.title}</CardTitle>
-          <span className={`px-2 py-1 rounded-full text-xs font-semibold ${categoryBadgeClass}`}>
-            {quiz.category === "managerial" ? "Managerial" : "Foundational"}
-          </span>
-        </div>
-        <CardDescription className="text-gray-300 flex items-center mt-2">
-          <Clock className="h-4 w-4 mr-1" /> {quiz.duration} minutes | {quiz.questions.length} questions
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="pt-4">
-        <p className="text-gray-700">{quiz.description}</p>
-      </CardContent>
-      <CardFooter>
-        <Button 
-          onClick={() => onSelectQuiz(quiz.id)} 
-          variant="default" 
-          className="w-full bg-econ-accent hover:bg-econ-navy"
-        >
-          Start Test <ArrowRight className="w-4 h-4 ml-2" />
-        </Button>
-      </CardFooter>
-    </Card>
   );
 };
 
