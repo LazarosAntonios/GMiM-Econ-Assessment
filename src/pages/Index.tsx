@@ -91,6 +91,7 @@ const Index = () => {
               quiz={selectedQuiz}
               studentInfo={studentInfo}
               onBack={() => setSelectedQuiz(null)}
+              onComplete={handleQuizComplete}
             />
           )}
         </>
