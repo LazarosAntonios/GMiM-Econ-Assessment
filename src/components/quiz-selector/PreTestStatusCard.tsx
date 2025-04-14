@@ -27,7 +27,7 @@ const PreTestStatusCard: React.FC<PreTestStatusCardProps> = ({ preTestStatus, st
             <CardTitle className="text-lg">Pre-Test Results</CardTitle>
             <Badge variant="outline" className={preTestStatus.isEligible ? 
               "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"}>
-              {preTestStatus.isEligible ? "Advanced Eligible" : "Standard Track"}
+              {preTestStatus.isEligible ? "Advanced Eligible" : "Pre-Sessional Required"}
             </Badge>
           </div>
         </CardHeader>
@@ -52,18 +52,18 @@ const PreTestStatusCard: React.FC<PreTestStatusCardProps> = ({ preTestStatus, st
             <div className={`p-2 rounded-lg ${preTestStatus.isEligible ? 
               'bg-green-50 text-green-700' : 'bg-yellow-50 text-yellow-700'}`}>
               {preTestStatus.isEligible ? (
-                <p className="text-sm font-medium flex items-center"><CheckCircle className="h-4 w-4 mr-1" /> Eligible for advanced course</p>
+                <p className="text-sm font-medium flex items-center"><CheckCircle className="h-4 w-4 mr-1" /> Ready for post-test</p>
               ) : (
-                <p className="text-sm font-medium flex items-center"><AlertTriangle className="h-4 w-4 mr-1" /> Standard course recommended</p>
+                <p className="text-sm font-medium flex items-center"><AlertTriangle className="h-4 w-4 mr-1" /> Complete pre-sessional first</p>
               )}
             </div>
           </div>
           <div className="mt-4 bg-blue-50 p-3 rounded-lg text-sm border border-blue-100">
             <p><strong>Next steps:</strong></p>
             {preTestStatus.isEligible ? (
-              <p>You can now continue to the optional advanced assessments or wait for the post-test (password available in Moodle).</p>
+              <p>You can now proceed to the post-test using the provided passkey. It's also recommended (but not required) to explore the optional advanced assessments.</p>
             ) : (
-              <p>Please refresh your skills on Moodle and return to complete the post-test when ready (password available in Moodle).</p>
+              <p>Please complete the pre-sessional materials on Moodle before taking the post-test. When you return, you can skip the pre-test and move directly to the post-test using the passkey available in Moodle.</p>
             )}
             <p className="mt-2 text-xs font-medium">Please screenshot this page for your records and email it to your instructor.</p>
           </div>

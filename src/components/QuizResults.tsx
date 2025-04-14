@@ -42,19 +42,32 @@ const QuizResults: React.FC<QuizResultsProps> = ({
     message = "Good job! Room for improvement.";
   }
 
-  // Determine eligibility recommendation
-  const eligibilityMessage = isEligibleForAdvanced 
-    ? "Congrats, you're eligible for the advanced course!" 
-    : "We recommend the standard Economics course for you.";
+  // Determine next steps message based on test type and result
+  let nextStepsMessage = "";
+  let eligibilityMessage = "";
 
-  // Next steps guidance message
-  const nextStepsMessage = isPostTest
-    ? "Thank you for completing the Post-Test! Please screenshot and email these results to your instructor."
-    : isEligibleForAdvanced 
-      ? "You can now proceed to the optional advanced assessments or wait for the post-test."
-      : "Please refresh your skills on Moodle and return to complete the post-test when ready (password available in Moodle).";
+  if (isPreTest) {
+    if (isEligibleForAdvanced) {
+      eligibilityMessage = "Congrats, you've passed the pre-test!";
+      nextStepsMessage = "You can now proceed to the post-test using the passkey below. It's also recommended (but not required) to explore the optional advanced assessments.";
+    } else {
+      eligibilityMessage = "You need to complete the pre-sessional materials first.";
+      nextStepsMessage = "Please complete the designated Moodle pre-sessional materials before taking the post-test. When you return to take the post-test, you can safely ignore the pre-test and move straight to the post-test using the passkey provided in Moodle.";
+    }
+  } else if (isPostTest) {
+    if (isEligibleForAdvanced) {
+      eligibilityMessage = "Congrats, you're eligible for the advanced course!";
+      nextStepsMessage = "You've passed the post-test successfully. It's recommended (but not required) to also take the optional advanced assessments.";
+    } else {
+      eligibilityMessage = "We recommend the standard Economics course for you.";
+      nextStepsMessage = "You've completed the post-test. Based on your results, we recommend following the standard course track.";
+    }
+  } else {
+    // For non-pre/post tests (like managerial tests)
+    nextStepsMessage = "Thank you for completing this assessment. Your results have been recorded.";
+  }
 
-  // Post-test passkey for eligible students
+  // Post-test passkey for pre-test passers
   const postTestPasskey = "PASS";
   const showPostTestPasskey = isPreTest && isEligibleForAdvanced;
 
@@ -128,11 +141,9 @@ const QuizResults: React.FC<QuizResultsProps> = ({
             </div>
           )}
           
-          {!isPostTest && (
-            <div className={`p-4 rounded-lg ${isEligibleForAdvanced ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-yellow-50 text-yellow-800 border border-yellow-200'}`}>
-              <p className="font-medium">{eligibilityMessage}</p>
-            </div>
-          )}
+          <div className={`p-4 rounded-lg mb-4 ${isEligibleForAdvanced ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-yellow-50 text-yellow-800 border border-yellow-200'}`}>
+            <p className="font-medium">{eligibilityMessage}</p>
+          </div>
           
           {/* Post-Test Passkey for eligible students */}
           {showPostTestPasskey && (
