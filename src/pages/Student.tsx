@@ -15,8 +15,29 @@ const Student: React.FC = () => {
   const [quizResults, setQuizResults] = useState<QuizResult[]>([]);
   const [showRegistration, setShowRegistration] = useState(false);
 
+  // Load any existing results from localStorage when component mounts
+  React.useEffect(() => {
+    try {
+      const storedResults = localStorage.getItem('studentResults');
+      if (storedResults) {
+        const parsedResults = JSON.parse(storedResults) as QuizResult[];
+        setQuizResults(parsedResults);
+      }
+    } catch (error) {
+      console.error("Error loading stored quiz results:", error);
+    }
+  }, []);
+
   const handleQuizComplete = (result: QuizResult) => {
-    setQuizResults(prev => [...prev, result]);
+    // Update the local state with the new result
+    setQuizResults(prev => {
+      // Remove any previous result for this quiz by this student
+      const filteredResults = prev.filter(
+        r => !(r.quizId === result.quizId && r.studentInfo.studentId === result.studentInfo.studentId)
+      );
+      return [...filteredResults, result];
+    });
+    
     setSelectedQuiz(null);
   };
 
@@ -25,10 +46,16 @@ const Student: React.FC = () => {
   };
 
   // Process props for QuizSelector
-  const completedQuizIds = quizResults.map(result => result.quizId);
-  const hasCompletedPreTest = completedQuizIds.includes(foundationalPreTest.id);
-  const isEligibleForAdvanced = quizResults.some(result => 
-    result.quizId === foundationalPreTest.id && result.isEligibleForAdvanced
+  const completedQuizIds = quizResults.filter(
+    result => result.studentInfo.studentId === studentInfo?.studentId
+  ).map(result => result.quizId);
+  
+  const hasCompletedPreTest = studentInfo && completedQuizIds.includes(foundationalPreTest.id);
+  
+  const isEligibleForAdvanced = studentInfo && quizResults.some(result => 
+    result.quizId === foundationalPreTest.id && 
+    result.isEligibleForAdvanced &&
+    result.studentInfo.studentId === studentInfo.studentId
   );
 
   return (
@@ -58,11 +85,12 @@ const Student: React.FC = () => {
               }}
               hasCompletedPreTest={hasCompletedPreTest}
               isEligibleForAdvanced={isEligibleForAdvanced}
-              studentResults={quizResults}
-              studentInfo={studentInfo} // Pass studentInfo to QuizSelector
+              studentResults={quizResults.filter(result => result.studentInfo.studentId === studentInfo.studentId)}
+              studentInfo={studentInfo}
             />
           ) : (
             <QuizContainer
+              key={selectedQuiz.id} // Add a key prop to force component remount when quiz changes
               quiz={selectedQuiz}
               studentInfo={studentInfo}
               onBack={() => setSelectedQuiz(null)}

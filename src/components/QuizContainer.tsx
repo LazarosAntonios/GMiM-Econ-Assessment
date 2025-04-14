@@ -36,6 +36,14 @@ const QuizContainer: React.FC<QuizContainerProps> = ({ quiz, onBack, studentInfo
     }
   }, [currentQuestionIndex, quiz.questions, currentSection]);
 
+  useEffect(() => {
+    setSelectedOptions(Array(quiz.questions.length).fill(null));
+    setAnsweredQuestions(Array(quiz.questions.length).fill(false));
+    setCurrentQuestionIndex(0);
+    setQuizCompleted(false);
+    setQuizStarted(false);
+  }, [quiz.id]);
+
   const handleOptionSelect = (optionIndex: number) => {
     const newSelectedOptions = [...selectedOptions];
     newSelectedOptions[currentQuestionIndex] = optionIndex;
@@ -177,9 +185,13 @@ const QuizContainer: React.FC<QuizContainerProps> = ({ quiz, onBack, studentInfo
       const existingResultsString = localStorage.getItem('studentResults') || '[]';
       const existingResults: QuizResult[] = JSON.parse(existingResultsString);
       
-      existingResults.push(result);
+      const filteredResults = existingResults.filter(
+        r => !(r.quizId === quiz.id && r.studentInfo.studentId === studentInfo.studentId)
+      );
       
-      localStorage.setItem('studentResults', JSON.stringify(existingResults));
+      filteredResults.push(result);
+      
+      localStorage.setItem('studentResults', JSON.stringify(filteredResults));
       
       toast({
         title: "Results saved",
