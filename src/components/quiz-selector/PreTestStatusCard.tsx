@@ -27,7 +27,7 @@ const PreTestStatusCard: React.FC<PreTestStatusCardProps> = ({ preTestStatus, st
             <CardTitle className="text-lg">Pre-Test Results</CardTitle>
             <Badge variant="outline" className={preTestStatus.isEligible ? 
               "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"}>
-              {preTestStatus.isEligible ? "Advanced Eligible" : "Pre-Sessional Required"}
+              {preTestStatus.isEligible ? "Pre-Test Passed" : "Additional Preparation Required"}
             </Badge>
           </div>
         </CardHeader>
@@ -61,7 +61,7 @@ const PreTestStatusCard: React.FC<PreTestStatusCardProps> = ({ preTestStatus, st
           <div className="mt-4 bg-blue-50 p-3 rounded-lg text-sm border border-blue-100">
             <p><strong>Next steps:</strong></p>
             {preTestStatus.isEligible ? (
-              <p>You can now proceed to the post-test using the provided passkey. It's also recommended (but not required) to explore the optional advanced assessments.</p>
+              <p>You can now proceed to the post-test using the provided passkey below. It's also recommended (but not required) to explore the optional advanced assessments.</p>
             ) : (
               <p>Please complete the pre-sessional materials on Moodle before taking the post-test. When you return, you can skip the pre-test and move directly to the post-test using the passkey available in Moodle.</p>
             )}

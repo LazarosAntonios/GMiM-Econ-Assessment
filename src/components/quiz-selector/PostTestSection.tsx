@@ -82,7 +82,7 @@ const PostTestSection: React.FC<PostTestSectionProps> = ({ postTest, onSelectQui
               <div className="flex items-start">
                 <AlertTriangle className="h-4 w-4 text-yellow-600 mr-2 mt-1" />
                 <p className="text-sm text-yellow-700">
-                  This is the final course assessment with a higher passing threshold (75%). It covers Math, Statistics, and Economics.
+                  This is the final course assessment with a passing threshold of 60%. It covers Math, Statistics, and Economics.
                 </p>
               </div>
             </div>

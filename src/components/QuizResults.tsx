@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -48,19 +47,19 @@ const QuizResults: React.FC<QuizResultsProps> = ({
 
   if (isPreTest) {
     if (isEligibleForAdvanced) {
-      eligibilityMessage = "Congrats, you've passed the pre-test!";
-      nextStepsMessage = "You can now proceed to the post-test using the passkey below. It's also recommended (but not required) to explore the optional advanced assessments.";
+      eligibilityMessage = "You've completed the pre-test!";
+      nextStepsMessage = "You can now proceed to the post-test using the passkey below.";
     } else {
-      eligibilityMessage = "You need to complete the pre-sessional materials first.";
-      nextStepsMessage = "Please complete the designated Moodle pre-sessional materials before taking the post-test. When you return to take the post-test, you can safely ignore the pre-test and move straight to the post-test using the passkey provided in Moodle.";
+      eligibilityMessage = "You need to complete the pre-sessional materials.";
+      nextStepsMessage = "Please complete the designated Moodle pre-sessional materials before taking the post-test. When you return to take the post-test, you can safely skip the pre-test and move straight to the post-test using the passkey provided in Moodle.";
     }
   } else if (isPostTest) {
     if (isEligibleForAdvanced) {
-      eligibilityMessage = "Congrats, you're eligible for the advanced course!";
-      nextStepsMessage = "You've passed the post-test successfully. It's recommended (but not required) to also take the optional advanced assessments.";
+      eligibilityMessage = "You've passed the post-test!";
+      nextStepsMessage = "You've successfully completed the required foundational assessment. It's recommended (but not required) to also take the optional advanced assessments.";
     } else {
-      eligibilityMessage = "We recommend the standard Economics course for you.";
-      nextStepsMessage = "You've completed the post-test. Based on your results, we recommend following the standard course track.";
+      eligibilityMessage = "You need to review the material and try again.";
+      nextStepsMessage = "You've completed the post-test but did not meet the required threshold. Please review the pre-sessional materials on Moodle and try again.";
     }
   } else {
     // For non-pre/post tests (like managerial tests)
