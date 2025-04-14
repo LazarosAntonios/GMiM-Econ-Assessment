@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,8 +7,8 @@ import { Separator } from '@/components/ui/separator';
 import { useNavigate } from 'react-router-dom';
 
 interface IntroMessageProps {
-  studentInfo?: StudentInfo; // Make studentInfo optional
-  onContinue?: () => void; // Make onContinue optional
+  studentInfo?: StudentInfo;
+  onContinue?: () => void;
 }
 
 const IntroMessage: React.FC<IntroMessageProps> = ({ studentInfo, onContinue }) => {
@@ -40,7 +39,7 @@ const IntroMessage: React.FC<IntroMessageProps> = ({ studentInfo, onContinue }) 
         <div className="prose max-w-none">
           <p className="text-lg font-medium mb-4">Hello there,</p>
           
-          <p>Welcome to your pre-arrival assessments for the MiM program. It might already sound and feel stressing but you know, when Apollo 13's oxygen tank exploded en route to the Moon back in the 70's, the crew had zero chance to rehearse their fix in space; they had to improvise life-saving solutions on the fly. Thankfully, your situation is much less stressful—you actually get a chance to prepare!</p>
+          <p>Welcome to your pre-arrival assessments for the MiM program. It might already sound and feel stressful but you know, when Apollo 13's oxygen tank exploded en route to the Moon back in the 70's, the crew had zero chance to rehearse their fix in space; they had to improvise life-saving solutions on the fly. Thankfully, your situation is much less stressful—you actually get a chance to prepare!</p>
           
           <p>Unlike those astronauts, you'll have clear guidance and supportive resources along the way. These tests are here to gauge your Math, Statistics, and Economics readiness, so you'll know exactly where you stand before stepping into the classroom.</p>
           
@@ -77,7 +76,7 @@ const IntroMessage: React.FC<IntroMessageProps> = ({ studentInfo, onContinue }) 
           
           <p>Use these assessments to your advantage—no last-minute heroics needed. If you have questions or want to discuss the best approach, just let me know. I'm here to make sure your mission to academic success goes smoothly.</p>
           
-          <p className="mt-6">So, whether you feel like a math wiz or you feel you are exploring uncharted waters, dive in and give it a go. Remember, like Eminem said:</p>
+          <p>Like Eminem said:</p>
           
           <blockquote className="border-l-4 border-econ-accent pl-4 italic my-4">
             "If you had one shot, or one opportunity to seize everything you ever wanted in one moment, would you capture it or let it slip?"
