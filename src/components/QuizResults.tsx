@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, Trophy, UserRound, IdCard, Check, X, Camera } from "lucide-react";
+import { ArrowRight, Trophy, UserRound, IdCard, Check, X, Camera, Key } from "lucide-react";
 import { StudentInfo } from '@/types/quiz';
 import { Separator } from "@/components/ui/separator";
 
@@ -32,6 +32,7 @@ const QuizResults: React.FC<QuizResultsProps> = ({
   failedSections
 }) => {
   const percentage = Math.round((score / totalQuestions) * 100);
+  const isPreTest = quizTitle.includes("Pre-Test");
   const isPostTest = quizTitle.includes("Post-Test");
   
   let message = "Excellent work!";
@@ -50,8 +51,12 @@ const QuizResults: React.FC<QuizResultsProps> = ({
   const nextStepsMessage = isPostTest
     ? "Thank you for completing the Post-Test! Please screenshot and email these results to your instructor."
     : isEligibleForAdvanced 
-      ? "You can now proceed to the optional advanced assessments or wait for the post-test (password available in Moodle)."
+      ? "You can now proceed to the optional advanced assessments or wait for the post-test."
       : "Please refresh your skills on Moodle and return to complete the post-test when ready (password available in Moodle).";
+
+  // Post-test passkey for eligible students
+  const postTestPasskey = "PASS";
+  const showPostTestPasskey = isPreTest && isEligibleForAdvanced;
 
   return (
     <Card className={`max-w-md w-full mx-auto shadow-lg animate-bounce-in border-t-4 ${isPostTest ? "border-purple-500" : "border-econ-gold"}`}>
@@ -126,6 +131,25 @@ const QuizResults: React.FC<QuizResultsProps> = ({
           {!isPostTest && (
             <div className={`p-4 rounded-lg ${isEligibleForAdvanced ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-yellow-50 text-yellow-800 border border-yellow-200'}`}>
               <p className="font-medium">{eligibilityMessage}</p>
+            </div>
+          )}
+          
+          {/* Post-Test Passkey for eligible students */}
+          {showPostTestPasskey && (
+            <div className="mt-6 bg-blue-100 border-2 border-blue-300 rounded-lg p-4">
+              <div className="flex items-center justify-center space-x-2 mb-2">
+                <Key className="h-5 w-5 text-blue-700" />
+                <h3 className="font-bold text-blue-800">Post-Test Access</h3>
+              </div>
+              <p className="text-blue-800 mb-2">
+                You've qualified to take the Post-Test directly! Use this passkey:
+              </p>
+              <div className="bg-white p-3 rounded border border-blue-300">
+                <p className="font-mono font-bold text-xl tracking-wider text-center">{postTestPasskey}</p>
+              </div>
+              <p className="text-xs text-blue-700 mt-2">
+                This passkey will unlock the Post-Test on the Quiz Selection screen.
+              </p>
             </div>
           )}
           
