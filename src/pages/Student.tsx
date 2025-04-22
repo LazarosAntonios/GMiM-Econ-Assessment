@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { sampleQuizzes } from "@/data/sampleQuizzes";
 import { foundationalPreTest } from "@/data/preTestQuiz";
@@ -8,12 +7,14 @@ import QuizContainer from "@/components/QuizContainer";
 import { Quiz, StudentInfo, QuizResult } from "@/types/quiz";
 import StudentRegistration from '@/components/StudentRegistration';
 import IntroMessage from '@/components/IntroMessage';
+import QuizResults from '@/components/QuizResults';
 
 const Student: React.FC = () => {
   const [studentInfo, setStudentInfo] = useState<StudentInfo | null>(null);
   const [selectedQuiz, setSelectedQuiz] = useState<Quiz | null>(null);
   const [quizResults, setQuizResults] = useState<QuizResult[]>([]);
   const [showRegistration, setShowRegistration] = useState(false);
+  const [currentResult, setCurrentResult] = useState<QuizResult | null>(null);
 
   // Load any existing results from localStorage when component mounts
   React.useEffect(() => {
@@ -38,11 +39,19 @@ const Student: React.FC = () => {
       return [...filteredResults, result];
     });
     
+    // Instead of redirecting to quiz selection, set the current result to display
+    setCurrentResult(result);
+    // Keep the selected quiz null so we don't show the quiz itself
     setSelectedQuiz(null);
   };
 
   const handleContinueToRegistration = () => {
     setShowRegistration(true);
+  };
+
+  const handleBackToQuizzes = () => {
+    // Clear the current result to go back to quiz selection
+    setCurrentResult(null);
   };
 
   // Process props for QuizSelector
@@ -70,7 +79,20 @@ const Student: React.FC = () => {
         </>
       ) : (
         <>
-          {!selectedQuiz ? (
+          {currentResult ? (
+            <QuizResults
+              score={currentResult.score}
+              totalQuestions={currentResult.totalQuestions}
+              onBack={handleBackToQuizzes}
+              quizTitle={currentResult.quizTitle}
+              quizCategory={currentResult.quizCategory}
+              studentInfo={currentResult.studentInfo}
+              isEligibleForAdvanced={currentResult.isEligibleForAdvanced}
+              sectionScores={currentResult.sectionScores}
+              passedSections={currentResult.passedSections}
+              failedSections={currentResult.failedSections}
+            />
+          ) : !selectedQuiz ? (
             <QuizSelector
               quizzes={sampleQuizzes}
               preTest={foundationalPreTest}
