@@ -83,6 +83,8 @@ const Student: React.FC = () => {
               sectionScores={currentResult.sectionScores}
               passedSections={currentResult.passedSections}
               failedSections={currentResult.failedSections}
+              completionDate={new Date(currentResult.date)}
+              onBackToPortal={handleBackToQuizzes}
             />
           ) : !selectedQuiz ? (
             <QuizSelector

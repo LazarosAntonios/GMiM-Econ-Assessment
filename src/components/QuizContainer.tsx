@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Quiz, StudentInfo, QuizResult } from "../types/quiz";
 import QuizHeader from "./QuizHeader";
@@ -233,6 +232,7 @@ const QuizContainer: React.FC<QuizContainerProps> = ({ quiz, onBack, studentInfo
         failedSections={failedSections}
         isEligibleForAdvanced={isEligible}
         completionDate={completionTime}
+        onBackToPortal={onBack}
       />
     );
   }

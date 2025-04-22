@@ -19,6 +19,7 @@ interface QuizResultsProps {
   passedSections?: string[];
   failedSections?: string[];
   completionDate?: Date;
+  onBackToPortal?: () => void; // Add optional callback for navigation
 }
 
 const QuizResults: React.FC<QuizResultsProps> = ({
@@ -31,7 +32,8 @@ const QuizResults: React.FC<QuizResultsProps> = ({
   sectionScores,
   passedSections,
   failedSections,
-  completionDate
+  completionDate,
+  onBackToPortal
 }) => {
   const navigate = useNavigate();
   const percentage = Math.round((score / totalQuestions) * 100);
@@ -67,7 +69,13 @@ const QuizResults: React.FC<QuizResultsProps> = ({
   const showPostTestPasskey = isPreTest && isEligibleForAdvanced;
 
   const handleBackToPortal = () => {
-    navigate('/student');
+    if (onBackToPortal) {
+      // Use the callback if provided (within Student page)
+      onBackToPortal();
+    } else {
+      // Fallback to direct navigation if used elsewhere
+      navigate('/student');
+    }
   };
 
   return (
