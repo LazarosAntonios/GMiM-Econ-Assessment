@@ -230,6 +230,7 @@ const QuizContainer: React.FC<QuizContainerProps> = ({ quiz, onBack, studentInfo
         passedSections={passedSections}
         failedSections={failedSections}
         isEligibleForAdvanced={isEligible}
+        completionDate={new Date()}
       />
     );
   }
