@@ -12,8 +12,8 @@ const ManagerialQuizTab: React.FC<ManagerialQuizTabProps> = ({ managerialQuizzes
   return (
     <>
       <div className="bg-blue-50 border-l-4 border-blue-500 p-3 mb-4">
-        <h3 className="font-bold text-blue-700">OPTIONAL: Advanced Course Assessments</h3>
-        <p className="text-sm text-blue-600">These assessments are optional and recommended for students eligible for the advanced track</p>
+        <h3 className="font-bold text-blue-700">Optional Advanced Assessments</h3>
+        <p className="text-sm text-blue-600">These optional assessments are available to all students who have completed the pre-test</p>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

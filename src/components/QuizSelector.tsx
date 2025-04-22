@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Quiz, QuizResult, StudentInfo } from '@/types/quiz'; // Add StudentInfo import
+import { Quiz, QuizResult, StudentInfo } from '@/types/quiz';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import PreTestStatusCard from './quiz-selector/PreTestStatusCard';
@@ -16,7 +16,7 @@ interface QuizSelectorProps {
   hasCompletedPreTest: boolean;
   isEligibleForAdvanced: boolean;
   studentResults: QuizResult[];
-  studentInfo: StudentInfo; // We need to receive studentInfo
+  studentInfo: StudentInfo;
 }
 
 const QuizSelector: React.FC<QuizSelectorProps> = ({ 
@@ -27,9 +27,10 @@ const QuizSelector: React.FC<QuizSelectorProps> = ({
   hasCompletedPreTest,
   isEligibleForAdvanced,
   studentResults,
-  studentInfo // Add studentInfo to the props destructuring
+  studentInfo
 }) => {
   const managerialQuizzes = quizzes.filter(quiz => quiz.category === "managerial");
+  // Default showManagerial to false, but let user toggle it regardless of eligibility
   const [showManagerial, setShowManagerial] = useState<boolean>(isEligibleForAdvanced);
   
   const getPreTestStatus = () => {
@@ -59,14 +60,13 @@ const QuizSelector: React.FC<QuizSelectorProps> = ({
       {/* Display Pre-Test Status if completed */}
       <PreTestStatusCard preTestStatus={preTestStatus} studentInfo={studentInfo} />
       
-      {/* Display Advanced Course Option with clear visual separation */}
-      {(isEligibleForAdvanced || !hasCompletedPreTest) && (
-        <AdvancedAssessmentToggle 
-          isEligibleForAdvanced={isEligibleForAdvanced}
-          showManagerial={showManagerial}
-          setShowManagerial={setShowManagerial}
-        />
-      )}
+      {/* Always show the Advanced Assessment toggle option */}
+      <AdvancedAssessmentToggle 
+        isEligibleForAdvanced={isEligibleForAdvanced}
+        showManagerial={showManagerial}
+        setShowManagerial={setShowManagerial}
+        hasCompletedPreTest={hasCompletedPreTest}
+      />
 
       {/* Clear separation for mandatory tests section */}
       <div className="mb-8">

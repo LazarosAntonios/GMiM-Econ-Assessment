@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { sampleQuizzes } from "@/data/sampleQuizzes";
 import { foundationalPreTest } from "@/data/preTestQuiz";
@@ -99,8 +100,8 @@ const Student: React.FC = () => {
                 ].find(q => q.id === quizId);
                 if (quiz) setSelectedQuiz(quiz);
               }}
-              hasCompletedPreTest={hasCompletedPreTest}
-              isEligibleForAdvanced={isEligibleForAdvanced}
+              hasCompletedPreTest={!!hasCompletedPreTest}
+              isEligibleForAdvanced={!!isEligibleForAdvanced}
               studentResults={quizResults.filter(result => result.studentInfo.studentId === studentInfo.studentId)}
               studentInfo={studentInfo}
             />
