@@ -66,13 +66,17 @@ const QuizResults: React.FC<QuizResultsProps> = ({
   const postTestPasskey = "PASS";
   const showPostTestPasskey = isPreTest && isEligibleForAdvanced;
 
+  const handleBackToPortal = () => {
+    navigate('/student');
+  };
+
   return (
     <div className="space-y-4 max-w-md mx-auto">
       {/* Show back button for both pre-test and post-test */}
       {(isPreTest || isPostTest) && (
         <Button 
           variant="outline" 
-          onClick={() => navigate('/student')}
+          onClick={handleBackToPortal}
           className="flex items-center gap-2"
         >
           <ArrowLeft className="h-4 w-4" /> Back to Assessment Portal

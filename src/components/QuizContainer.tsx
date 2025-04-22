@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Quiz, StudentInfo, QuizResult } from "../types/quiz";
 import QuizHeader from "./QuizHeader";
@@ -218,6 +219,7 @@ const QuizContainer: React.FC<QuizContainerProps> = ({ quiz, onBack, studentInfo
     const sectionScores = calculateSectionScores();
     const { passedSections, failedSections } = getSectionResults(sectionScores);
     const isEligible = determineEligibility(score, quiz.questions.length, sectionScores);
+    const completionTime = new Date();
     
     return (
       <QuizResults
@@ -230,7 +232,7 @@ const QuizContainer: React.FC<QuizContainerProps> = ({ quiz, onBack, studentInfo
         passedSections={passedSections}
         failedSections={failedSections}
         isEligibleForAdvanced={isEligible}
-        completionDate={new Date()}
+        completionDate={completionTime}
       />
     );
   }
