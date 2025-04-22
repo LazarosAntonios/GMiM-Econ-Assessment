@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Trophy, UserRound, IdCard, Check, X, Camera, ArrowLeft } from "lucide-react";
@@ -67,7 +68,8 @@ const QuizResults: React.FC<QuizResultsProps> = ({
 
   return (
     <div className="space-y-4 max-w-md mx-auto">
-      {isPreTest && (
+      {/* Show back button for both pre-test and post-test */}
+      {(isPreTest || isPostTest) && (
         <Button 
           variant="outline" 
           onClick={() => navigate('/student')}
