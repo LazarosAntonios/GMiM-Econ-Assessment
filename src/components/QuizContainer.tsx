@@ -223,7 +223,6 @@ const QuizContainer: React.FC<QuizContainerProps> = ({ quiz, onBack, studentInfo
       <QuizResults
         score={score}
         totalQuestions={quiz.questions.length}
-        onBack={onBack}
         quizTitle={quiz.title}
         quizCategory={quiz.category}
         studentInfo={studentInfo}
