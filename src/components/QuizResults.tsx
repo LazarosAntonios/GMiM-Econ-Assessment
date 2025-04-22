@@ -1,14 +1,13 @@
+
 import React from 'react';
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, Trophy, UserRound, IdCard, Check, X, Camera, Key } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Trophy, UserRound, IdCard, Check, X, Camera } from "lucide-react";
 import { StudentInfo } from '@/types/quiz';
 import { Separator } from "@/components/ui/separator";
 
 interface QuizResultsProps {
   score: number;
   totalQuestions: number;
-  onBack: () => void;
   quizTitle: string;
   quizCategory: "managerial" | "foundational";
   studentInfo: StudentInfo;
@@ -21,7 +20,6 @@ interface QuizResultsProps {
 const QuizResults: React.FC<QuizResultsProps> = ({
   score,
   totalQuestions,
-  onBack,
   quizTitle,
   quizCategory,
   studentInfo,
@@ -33,17 +31,10 @@ const QuizResults: React.FC<QuizResultsProps> = ({
   const percentage = Math.round((score / totalQuestions) * 100);
   const isPreTest = quizTitle.includes("Pre-Test");
   const isPostTest = quizTitle.includes("Post-Test");
-  
-  let message = "Excellent work!";
-  if (percentage < 60) {
-    message = "Keep studying and try again!";
-  } else if (percentage < 80) {
-    message = "Good job! Room for improvement.";
-  }
 
   // Determine next steps message based on test type and result
-  let nextStepsMessage = "";
   let eligibilityMessage = "";
+  let nextStepsMessage = "";
 
   if (isPreTest) {
     if (isEligibleForAdvanced) {
@@ -58,11 +49,10 @@ const QuizResults: React.FC<QuizResultsProps> = ({
       eligibilityMessage = "You've passed the post-test!";
       nextStepsMessage = "You've successfully completed the required foundational assessment. It's recommended (but not required) to also take the optional advanced assessments.";
     } else {
-      eligibilityMessage = "You need to review the material and try again.";
-      nextStepsMessage = "You've completed the post-test but did not meet the required threshold. Please review the pre-sessional materials on Moodle and try again.";
+      eligibilityMessage = "Assessment completed.";
+      nextStepsMessage = "You've completed the post-test. Please review the pre-sessional materials on Moodle for additional support.";
     }
   } else {
-    // For non-pre/post tests (like managerial tests)
     nextStepsMessage = "Thank you for completing this assessment. Your results have been recorded.";
   }
 
@@ -74,13 +64,13 @@ const QuizResults: React.FC<QuizResultsProps> = ({
     <Card className={`max-w-md w-full mx-auto shadow-lg animate-bounce-in border-t-4 ${isPostTest ? "border-purple-500" : "border-econ-gold"}`}>
       <CardHeader className={`${isPostTest ? "bg-purple-900" : "bg-econ-navy"} text-white rounded-t-lg text-center pb-8 pt-10`}>
         <Trophy className="w-16 h-16 mx-auto mb-4 text-econ-gold" />
-        <CardTitle className="text-2xl">Quiz Results</CardTitle>
+        <CardTitle className="text-2xl">Assessment Results</CardTitle>
         <CardDescription className="text-gray-300">
           {quizTitle}
         </CardDescription>
       </CardHeader>
       <CardContent className="pt-8">
-        {/* Student Information - Enhanced and more visible */}
+        {/* Student Information */}
         <div className="flex items-center justify-center space-x-2 mb-6 p-3 bg-blue-50 rounded-lg border border-blue-100">
           <div className="flex flex-col items-center">
             <div className="flex items-center mb-1">
@@ -106,9 +96,8 @@ const QuizResults: React.FC<QuizResultsProps> = ({
                 style={{ width: `${percentage}%` }}
               ></div>
             </div>
-            <p className="text-sm text-gray-600">{percentage}% Correct</p>
+            <p className="text-sm text-gray-600">{percentage}% Complete</p>
           </div>
-          <p className="text-lg font-medium mb-4">{message}</p>
           
           {/* Section Scores */}
           {sectionScores && Object.keys(sectionScores).length > 0 && (
@@ -148,7 +137,6 @@ const QuizResults: React.FC<QuizResultsProps> = ({
           {showPostTestPasskey && (
             <div className="mt-6 bg-blue-100 border-2 border-blue-300 rounded-lg p-4">
               <div className="flex items-center justify-center space-x-2 mb-2">
-                <Key className="h-5 w-5 text-blue-700" />
                 <h3 className="font-bold text-blue-800">Post-Test Access</h3>
               </div>
               <p className="text-blue-800 mb-2">
@@ -157,15 +145,11 @@ const QuizResults: React.FC<QuizResultsProps> = ({
               <div className="bg-white p-3 rounded border border-blue-300">
                 <p className="font-mono font-bold text-xl tracking-wider text-center">{postTestPasskey}</p>
               </div>
-              <p className="text-xs text-blue-700 mt-2">
-                This passkey will unlock the Post-Test on the Quiz Selection screen.
-              </p>
             </div>
           )}
           
           <div className="mt-6">
             <Separator className="my-4" />
-            <h3 className="font-semibold text-lg mb-2">Next Steps</h3>
             <p className="text-gray-700">{nextStepsMessage}</p>
             
             <div className="bg-blue-50 p-4 rounded-lg mt-4 border border-blue-100 flex items-start">
@@ -178,17 +162,9 @@ const QuizResults: React.FC<QuizResultsProps> = ({
           </div>
         </div>
       </CardContent>
-      <CardFooter>
-        <Button 
-          onClick={onBack} 
-          variant="default" 
-          className={`w-full ${isPostTest ? "bg-purple-600 hover:bg-purple-700" : "bg-econ-accent hover:bg-econ-navy"}`}
-        >
-          <ArrowRight className="w-4 h-4 mr-2" /> Back to Quizzes
-        </Button>
-      </CardFooter>
     </Card>
   );
 };
 
 export default QuizResults;
+

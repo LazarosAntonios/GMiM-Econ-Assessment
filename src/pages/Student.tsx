@@ -16,7 +16,6 @@ const Student: React.FC = () => {
   const [showRegistration, setShowRegistration] = useState(false);
   const [currentResult, setCurrentResult] = useState<QuizResult | null>(null);
 
-  // Load any existing results from localStorage when component mounts
   React.useEffect(() => {
     try {
       const storedResults = localStorage.getItem('studentResults');
@@ -30,18 +29,14 @@ const Student: React.FC = () => {
   }, []);
 
   const handleQuizComplete = (result: QuizResult) => {
-    // Update the local state with the new result
     setQuizResults(prev => {
-      // Remove any previous result for this quiz by this student
       const filteredResults = prev.filter(
         r => !(r.quizId === result.quizId && r.studentInfo.studentId === result.studentInfo.studentId)
       );
       return [...filteredResults, result];
     });
     
-    // Instead of redirecting to quiz selection, set the current result to display
     setCurrentResult(result);
-    // Keep the selected quiz null so we don't show the quiz itself
     setSelectedQuiz(null);
   };
 
@@ -50,11 +45,9 @@ const Student: React.FC = () => {
   };
 
   const handleBackToQuizzes = () => {
-    // Clear the current result to go back to quiz selection
     setCurrentResult(null);
   };
 
-  // Process props for QuizSelector
   const completedQuizIds = quizResults.filter(
     result => result.studentInfo.studentId === studentInfo?.studentId
   ).map(result => result.quizId);
@@ -83,7 +76,6 @@ const Student: React.FC = () => {
             <QuizResults
               score={currentResult.score}
               totalQuestions={currentResult.totalQuestions}
-              onBack={handleBackToQuizzes}
               quizTitle={currentResult.quizTitle}
               quizCategory={currentResult.quizCategory}
               studentInfo={currentResult.studentInfo}
@@ -112,7 +104,7 @@ const Student: React.FC = () => {
             />
           ) : (
             <QuizContainer
-              key={selectedQuiz.id} // Add a key prop to force component remount when quiz changes
+              key={selectedQuiz.id}
               quiz={selectedQuiz}
               studentInfo={studentInfo}
               onBack={() => setSelectedQuiz(null)}
