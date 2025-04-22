@@ -15,7 +15,6 @@ const Landing: React.FC = () => {
   const [typedText, setTypedText] = useState("");
   const fullText = "Created by Lazaros-Antonios Chatzilazarou, PhD";
 
-  // Simulate loading progress
   useEffect(() => {
     const duration = 800; // Total duration in ms
     const interval = 50; // Update interval in ms
@@ -43,7 +42,6 @@ const Landing: React.FC = () => {
     };
   }, []);
 
-  // Typewriter effect
   useEffect(() => {
     if (typedText.length < fullText.length) {
       const typeTimer = setTimeout(() => {
@@ -57,13 +55,12 @@ const Landing: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-4">
       <div className="w-full max-w-md mx-auto text-center space-y-6">
-        {/* LSE Logo with enhanced animation */}
         {loadingLogo ? (
           <div className="w-32 mx-auto mb-4">
             <Progress value={loadingProgress} className="h-1" />
           </div>
         ) : (
-          <div className={`transform transition-all duration-2000 mb-4 ${
+          <div className={`flex justify-center mb-8 transform transition-all duration-2000 ${
             logoVisible 
               ? 'opacity-100 scale-100 saturate-100' 
               : 'opacity-0 scale-95 saturate-0 -translate-y-2'
@@ -74,7 +71,7 @@ const Landing: React.FC = () => {
               onError={(e) => {
                 e.currentTarget.src = "https://www.lse.ac.uk/style-assets/images/lse.svg";
               }}
-              className="h-32 object-contain transition-all duration-2000" 
+              className="h-48 object-contain transition-all duration-2000" 
             />
           </div>
         )}
@@ -111,7 +108,6 @@ const Landing: React.FC = () => {
           </Card>
         )}
         
-        {/* Creator credit with typewriter effect */}
         <div className="mt-8 text-sm text-gray-500">
           {typedText}
           {typedText.length < fullText.length && <span className="animate-pulse">|</span>}
